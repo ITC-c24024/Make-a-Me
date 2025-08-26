@@ -83,14 +83,14 @@ public class EnergyBatteryScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤー、床、壁オブジェクトにあたると放電
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             if (bombSwitch)
             {
                 StartCoroutine(Discharge());
             }
         }
-        else if (collision.gameObject.tag == "Discharge")
+        else if (collision.gameObject.CompareTag("Discharge"))
         {
             var playerNum = collision.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
             ownerNum = playerNum;
