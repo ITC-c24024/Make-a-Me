@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         var gameController = GameObject.Find("GameController").GetComponent<GameController>();
         gameController.SelectPrefab(playerNum);
     }
-
+    
     void Update()
     {
         //“ü—Í’l‚ðVector2Œ^‚ÅŽæ“¾

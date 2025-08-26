@@ -22,9 +22,12 @@ public class GameController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// 次のプレイヤーのPrefabを変更
+    /// </summary>
+    /// <param name="playerNum">ロボットPrefabの要素数を指定</param>
     public void SelectPrefab(int playerNum)
     {
-        //次のプレイヤーのPrefabを変更
         manager.playerPrefab = robots[playerNum];
     }
 }
