@@ -1,22 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(PlayerInputManager))]
 
 public class GameController : MonoBehaviour
 {
     [SerializeField, Header("ロボットオブジェクト")]
     GameObject[] robots;
 
+    PlayerInputManager manager;
+
     void Start()
     {
-        for (int i = 0; i < robots.Length; i++)
-        {
-            Instantiate(robots[i], new Vector3(0, 0, 0), Quaternion.identity);
-        }        
+        manager = GetComponent<PlayerInputManager>();
     }
 
     void Update()
     {
         
+    }
+
+    public void SelectPrefab(int playerNum)
+    {
+        //次のプレイヤーのPrefabを変更
+        manager.playerPrefab = robots[playerNum];
     }
 }

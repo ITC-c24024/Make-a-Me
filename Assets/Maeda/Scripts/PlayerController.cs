@@ -30,7 +30,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        
+        var gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.SelectPrefab(playerNum);
     }
 
     void Update()
