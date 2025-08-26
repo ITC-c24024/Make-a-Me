@@ -21,7 +21,8 @@ public class EnergyBatteryScript : MonoBehaviour
     [SerializeField, Header("リスポーン場所のオブジェクト")]
     GameObject[] respawnObj;
 
-    Rigidbody batteryRB;//CoreオブジェクトのRigidbody
+    Rigidbody batteryRB;//バッテリーオブジェクトのRigidbody
+    Collider batteryCol;//バッテリーオブジェクトのCollider
 
     [SerializeField, Header("放電可能かどうかのスイッチ")]
     bool bombSwitch;
@@ -31,6 +32,7 @@ public class EnergyBatteryScript : MonoBehaviour
     void Start()
     {
         batteryRB = gameObject.GetComponent<Rigidbody>();
+        batteryCol = gameObject.GetComponent<Collider>();
     }
 
     void FixedUpdate()
@@ -59,6 +61,7 @@ public class EnergyBatteryScript : MonoBehaviour
         ownerNum = num;
         ownerObj = player;
         batteryRB.isKinematic = true;
+        batteryCol.isTrigger = true;
     }
 
     /// <summary>
@@ -79,6 +82,7 @@ public class EnergyBatteryScript : MonoBehaviour
 
         ownerObj = null;
         batteryRB.isKinematic = false;
+        batteryCol.isTrigger = false;
         batteryRB.AddForce(ownerForward * throwPower, ForceMode.Impulse);
         bombSwitch = true;
     }
@@ -94,11 +98,14 @@ public class EnergyBatteryScript : MonoBehaviour
                 StartCoroutine(Discharge());
             }
         }
+        //放電に当たると連鎖する
         else if (collision.gameObject.CompareTag("Discharge"))
         {
+            //連鎖元のバッテリーの所有者を特定
             var playerNum = collision.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
             ownerNum = playerNum;
-            StartCoroutine(Discharge());
+
+            StartCoroutine(Discharge());//放電
         }
     }
 
@@ -108,6 +115,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// <returns></returns>
     IEnumerator Discharge()
     {
+        //重複防止
         if (isDischarge)
         {
             yield break;
@@ -120,16 +128,21 @@ public class EnergyBatteryScript : MonoBehaviour
         batteryRB.velocity = Vector3.zero;//移動の慣性をリセット
         batteryRB.angularVelocity = Vector3.zero;//回転の慣性をリセット
 
+        //放電範囲を表示
         dischargeObj.SetActive(true);
         bombSwitch = false;
         yield return new WaitForSeconds(1);
         dischargeObj.SetActive(false);
         isDischarge = false;
 
-        StartCoroutine(Respawn());
+        StartCoroutine(Respawn());//リスポーン
     }
 
-
+    /// <summary>
+    /// リスポーン処理
+    /// リスポーン場所に指定されたオブジェクトからランダムに選択してリスポーン
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Respawn()
     {
         batteryRB.isKinematic = true;
