@@ -6,27 +6,33 @@ using UnityEngine;
 
 public class EnergyBatteryScript : MonoBehaviour
 {
-    [SerializeField,Header("所持しているプレイヤーの番号")]
+    [SerializeField, Header("所持しているプレイヤーの番号")]
     int ownerNum;
-    
-    [SerializeField,Header("所持しているプレイヤーのオブジェクト")]
-    GameObject ownerObj;
 
-    Rigidbody coreRB;//CoreオブジェクトのRigidbody
-
-    [SerializeField,Header("放電可能かどうかのスイッチ")]
-    bool bombSwitch;
-    
-    bool isDischarge;//放電重複しないようにするフラグ
-
-    [SerializeField,Header("投げる強さ")]
+    [SerializeField, Header("投げる強さ")]
     float throwPower;
 
-    [SerializeField,Header("放電オブジェクト")]
+    [SerializeField, Header("所持しているプレイヤーのオブジェクト")]
+    GameObject ownerObj;
+
+    [SerializeField, Header("放電オブジェクト")]
     GameObject dischargeObj;
+
+    [SerializeField, Header("リスポーン場所のオブジェクト")]
+    GameObject[] respawnObj;
+
+    Rigidbody batteryRB;//バッテリーオブジェクトのRigidbody
+    Collider batteryCol;//バッテリーオブジェクトのCollider
+
+    [SerializeField, Header("放電可能かどうかのスイッチ")]
+    bool bombSwitch;
+
+    bool isDischarge;//放電重複しないようにするフラグ
+
     void Start()
     {
-        coreRB = gameObject.GetComponent<Rigidbody>();
+        batteryRB = gameObject.GetComponent<Rigidbody>();
+        batteryCol = gameObject.GetComponent<Collider>();
     }
 
     void FixedUpdate()
@@ -34,8 +40,8 @@ public class EnergyBatteryScript : MonoBehaviour
 
         if (ownerObj != null)
         {
-            coreRB.MovePosition(ownerObj.transform.position + Vector3.up);
-            coreRB.MoveRotation(ownerObj.transform.rotation);
+            batteryRB.MovePosition(ownerObj.transform.position + Vector3.up);
+            batteryRB.MoveRotation(ownerObj.transform.rotation);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -54,7 +60,8 @@ public class EnergyBatteryScript : MonoBehaviour
     {
         ownerNum = num;
         ownerObj = player;
-        coreRB.isKinematic = true;
+        batteryRB.isKinematic = true;
+        batteryCol.isTrigger = true;
     }
 
     /// <summary>
@@ -74,8 +81,9 @@ public class EnergyBatteryScript : MonoBehaviour
         var ownerForward = ownerObj.transform.forward;
 
         ownerObj = null;
-        coreRB.isKinematic = false;
-        coreRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
+        batteryRB.isKinematic = false;
+        batteryCol.isTrigger = false;
+        batteryRB.AddForce(ownerForward * throwPower, ForceMode.Impulse);
         bombSwitch = true;
     }
 
@@ -83,18 +91,21 @@ public class EnergyBatteryScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤー、床、壁オブジェクトにあたると放電
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             if (bombSwitch)
             {
                 StartCoroutine(Discharge());
             }
         }
-        else if (collision.gameObject.tag == "Discharge")
+        //放電に当たると連鎖する
+        else if (collision.gameObject.CompareTag("Discharge"))
         {
+            //連鎖元のバッテリーの所有者を特定
             var playerNum = collision.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
             ownerNum = playerNum;
-            StartCoroutine(Discharge());
+
+            StartCoroutine(Discharge());//放電
         }
     }
 
@@ -104,6 +115,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// <returns></returns>
     IEnumerator Discharge()
     {
+        //重複防止
         if (isDischarge)
         {
             yield break;
@@ -112,10 +124,36 @@ public class EnergyBatteryScript : MonoBehaviour
         {
             isDischarge = true;
         }
+
+        batteryRB.velocity = Vector3.zero;//移動の慣性をリセット
+        batteryRB.angularVelocity = Vector3.zero;//回転の慣性をリセット
+
+        //放電範囲を表示
         dischargeObj.SetActive(true);
         bombSwitch = false;
         yield return new WaitForSeconds(1);
         dischargeObj.SetActive(false);
         isDischarge = false;
+
+        StartCoroutine(Respawn());//リスポーン
+    }
+
+    /// <summary>
+    /// リスポーン処理
+    /// リスポーン場所に指定されたオブジェクトからランダムに選択してリスポーン
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Respawn()
+    {
+        batteryRB.isKinematic = true;
+
+        var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
+        transform.position = selectObj.transform.position;
+        transform.rotation = selectObj.transform.rotation;
+
+        yield return new WaitForSeconds(2);
+
+        batteryRB.isKinematic = false;
+        batteryRB.AddForce(selectObj.transform.forward * throwPower / 2, ForceMode.Impulse);
     }
 }
