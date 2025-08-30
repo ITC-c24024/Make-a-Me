@@ -5,6 +5,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : ActionScript
 {
+    [SerializeField]
+    TakeRange takeRangeSC;
+    [SerializeField]
+    CatchRange catchRangeSC;
     EnergyBatteryScript batteryScript;
 
     //ÉvÉåÉCÉÑÅ[ÇÃî‘çÜ
@@ -43,6 +47,8 @@ public class PlayerController : ActionScript
         if (haveBattery && throwAct && !isTimer)
         {
             haveBattery = false;
+            StartCoroutine(takeRangeSC.PickupDelay());
+            StartCoroutine(catchRangeSC.PickupDelay());
             Debug.Log("throw");
             batteryScript.Throw();
         }
