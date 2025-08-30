@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
-[RequireComponent(typeof(PlayerInput))]
-
-public class PlayerController : MonoBehaviour
+public class PlayerController : ActionScript
 {
     EnergyBatteryScript batteryScript;
 
@@ -14,30 +11,10 @@ public class PlayerController : MonoBehaviour
     public int playerNum = 0;
     
     [SerializeField,Header("プレイヤーの移動速度")]
-    float MoveSpeed = 1.0f;
-
-    //入力タイマー
-    float timer = 0;
-    //入力制限
-    public bool input = false;
+    float MoveSpeed = 1.0f;   
 
     //バッテリーの所持判定
     public bool haveBattery = false;
-
-    //移動アクション
-    InputAction moveAction;
-    //取る、投げるアクション
-    InputAction throwAction;
-
-    private void Awake()
-    {
-        //ActionMapを取得
-        var input = GetComponent<PlayerInput>();
-        var actionMap = input.currentActionMap;
-        //対応するアクションを取得
-        moveAction = actionMap["Move"];
-        throwAction = actionMap["Throw"];
-    }
 
     void Start()
     {
@@ -63,23 +40,11 @@ public class PlayerController : MonoBehaviour
 
         //ボタンを押した判定
         var throwAct = throwAction.triggered;
-        if (haveBattery && throwAct)
+        if (haveBattery && throwAct && !isTimer)
         {
-            input = true;
-
             haveBattery = false;
             Debug.Log("throw");
             batteryScript.Throw();
-        }
-
-        if (input)
-        {
-            timer += Time.deltaTime;
-            if (timer >= 0.2f)
-            {
-                timer = 0;
-                input = false;
-            }
         }
     }
 
@@ -91,5 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         haveBattery = true;
         batteryScript = batterySC;
+
+        StartCoroutine(PickupDelay());
     }
 }
