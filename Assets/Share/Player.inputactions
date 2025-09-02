@@ -49,33 +49,11 @@
                 },
                 {
                     "name": "",
-                    "id": "bfd95718-11ff-4262-9b04-00d92b490ef4",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Throw",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e81ae8e6-c0d6-4a3b-b4dd-7831f312a6bc",
                     "path": "<SwitchProControllerHID>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Joystick",
-                    "action": "Throw",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9ee36d8b-2a45-4ec9-90a4-c594b80012e4",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
+                    "groups": "Joystick;Gamepad",
                     "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false

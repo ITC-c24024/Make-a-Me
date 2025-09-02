@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TakeRange : ActionScript
+public class CatchRange : ActionScript
 {
     EnergyBatteryScript batteryScript;
 
@@ -31,7 +31,7 @@ public class TakeRange : ActionScript
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
         {
             canTake = true;
-            batteryScript = other.gameObject.GetComponent<EnergyBatteryScript>();           
+            batteryScript = other.gameObject.GetComponent<EnergyBatteryScript>();
         }
     }
 
