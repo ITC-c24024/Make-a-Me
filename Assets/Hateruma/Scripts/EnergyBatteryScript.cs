@@ -40,7 +40,7 @@ public class EnergyBatteryScript : MonoBehaviour
         if (ownerObj != null)
         {
             batteryRB.MovePosition(ownerObj.transform.position + Vector3.up);
-            batteryRB.MoveRotation(ownerObj.transform.rotation);
+            batteryRB.MoveRotation(Quaternion.Euler(ownerObj.transform.rotation.x,90,ownerObj.transform.rotation.z));
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
