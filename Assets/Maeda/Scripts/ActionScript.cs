@@ -7,8 +7,6 @@ using UnityEngine.InputSystem;
 
 public class ActionScript : MonoBehaviour
 {
-    public PlayerController playerController;
-
     //ロボットオブジェクト
     public GameObject robot;
 

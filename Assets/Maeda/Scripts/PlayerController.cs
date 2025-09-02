@@ -49,7 +49,7 @@ public class PlayerController : ActionScript
             haveBattery = false;
             StartCoroutine(takeRangeSC.PickupDelay());
             StartCoroutine(catchRangeSC.PickupDelay());
-            Debug.Log("throw");
+            
             batteryScript.Throw();
         }
     }
@@ -60,9 +60,14 @@ public class PlayerController : ActionScript
     /// <param name="batterySC">TakeRangeで取ったバッテリーのスクリプト</param>
     public void ChangeBatterySC(EnergyBatteryScript batterySC)
     {
-        haveBattery = true;
+        ChangeHaveBattery();
         batteryScript = batterySC;
 
         StartCoroutine(PickupDelay());
+    }
+
+    public void ChangeHaveBattery()
+    {
+        haveBattery = !haveBattery;
     }
 }

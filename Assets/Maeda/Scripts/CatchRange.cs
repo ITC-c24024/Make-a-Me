@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class CatchRange : ActionScript
 {
     EnergyBatteryScript batteryScript;
+    PlayerController playerController;
 
     //Žæ‚ê‚é”»’è
     bool canTake = false;
@@ -25,7 +26,7 @@ public class CatchRange : ActionScript
             playerController.ChangeBatterySC(batteryScript);
         }
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
@@ -41,5 +42,5 @@ public class CatchRange : ActionScript
         {
             canTake = false;
         }
-    }
+    }*/
 }

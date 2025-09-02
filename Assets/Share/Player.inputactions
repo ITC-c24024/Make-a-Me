@@ -57,6 +57,17 @@
                     "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "11c81d40-46ab-44e0-98de-fb64ea7b2aae",
+                    "path": "<HID::Nintendo Wireless Gamepad>/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Joystick",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
