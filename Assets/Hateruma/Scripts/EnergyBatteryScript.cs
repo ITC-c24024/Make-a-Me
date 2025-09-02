@@ -40,7 +40,7 @@ public class EnergyBatteryScript : MonoBehaviour
         if (ownerObj != null)
         {
             batteryRB.MovePosition(ownerObj.transform.position + Vector3.up);
-            batteryRB.MoveRotation(Quaternion.Euler(ownerObj.transform.rotation.x,90,ownerObj.transform.rotation.z));
+            batteryRB.MoveRotation(ownerObj.transform.rotation * Quaternion.Euler(0,90,0));
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -146,6 +146,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// <returns></returns>
     IEnumerator Respawn()
     {
+        ownerNum = 0;
         batteryRB.isKinematic = true;
 
         var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
