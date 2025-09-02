@@ -925,7 +925,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf79db44f5a4b74da2824da20b99bcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
   robot: {fileID: 6095127527433801986}
   isTimer: 0
   moveAction:
@@ -946,6 +945,13 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  playerController: {fileID: 5555456143422510774}
+  robots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerNum: 2
 --- !u!1 &5157077222096756531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1327,7 +1333,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d17f6bbb40099d546a0973c9f3f0c324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 5555456143422510774}
   robot: {fileID: 6095127527433801986}
   isTimer: 0
   moveAction:
@@ -1948,7 +1953,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9a919b8e01af04d86ab420a05204d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
   robot: {fileID: 6095127527433801986}
   isTimer: 0
   moveAction:

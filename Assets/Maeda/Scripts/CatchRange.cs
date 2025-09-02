@@ -21,18 +21,30 @@ public class CatchRange : ActionScript
         var takeAct = throwAction.triggered;
         if (!playerController.haveBattery && takeAct && canTake && !isTimer)
         {
-            Debug.Log("take");
+            ChatchBattery();
+        }
+    }
+
+    void ChatchBattery()
+    {
+        if (batteryScript != null)
+        {
             batteryScript.ChangeOwner(playerController.playerNum, robot);
             playerController.ChangeBatterySC(batteryScript);
         }
     }
-    /*
+    
     private void OnTriggerEnter(Collider other)
     {
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
-        {
-            canTake = true;
-            batteryScript = other.gameObject.GetComponent<EnergyBatteryScript>();
+        {           
+            var energyBatterySC= other.gameObject.GetComponent<EnergyBatteryScript>();
+            //バッテリーが投げられているなら
+            if (energyBatterySC.bombSwitch)
+            {
+                canTake = true;
+                batteryScript = energyBatterySC;
+            }   
         }
     }
 
@@ -40,7 +52,13 @@ public class CatchRange : ActionScript
     {
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
         {
-            canTake = false;
+            var energyBatterySC = other.gameObject.GetComponent<EnergyBatteryScript>();
+            //バッテリーが投げられているなら
+            if (energyBatterySC.bombSwitch)
+            {
+                canTake = false;
+                batteryScript = null;
+            }
         }
-    }*/
+    }
 }

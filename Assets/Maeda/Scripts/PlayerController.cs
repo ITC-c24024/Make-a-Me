@@ -23,6 +23,7 @@ public class PlayerController : ActionScript
     void Start()
     {
         var gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.SetPlayer(playerNum, this.gameObject);
         gameController.SelectPrefab(playerNum);
     }
     
