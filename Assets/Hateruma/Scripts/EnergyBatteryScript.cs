@@ -24,8 +24,7 @@ public class EnergyBatteryScript : MonoBehaviour
     Rigidbody batteryRB;//バッテリーオブジェクトのRigidbody
     Collider batteryCol;//バッテリーオブジェクトのCollider
 
-    [SerializeField, Header("放電可能かどうかのスイッチ")]
-    bool bombSwitch;
+    public bool bombSwitch;//放電可能かどうかのスイッチ
 
     bool isDischarge;//放電重複しないようにするフラグ
 
@@ -62,6 +61,8 @@ public class EnergyBatteryScript : MonoBehaviour
         ownerObj = player;
         batteryRB.isKinematic = true;
         batteryCol.isTrigger = true;
+
+        bombSwitch = false;
     }
 
     /// <summary>
