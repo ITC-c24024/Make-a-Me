@@ -484,6 +484,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  canTake: 0
 --- !u!114 &1897016784610903132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,6 +528,7 @@ GameObject:
   - component: {fileID: 517394160873454857}
   - component: {fileID: 5225391647644944689}
   - component: {fileID: 6686249595345664881}
+  - component: {fileID: 6787290180736966054}
   m_Layer: 0
   m_Name: Chara_R
   m_TagString: Player1
@@ -671,6 +673,27 @@ MonoBehaviour:
   playerNum: 1
   MoveSpeed: 3
   haveBattery: 0
+  stanTime: 2
+--- !u!114 &6787290180736966054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427968437311824722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d1a4784a4d14c448925a3f1f24dd86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level: 1
+  allEnergyAmount: 0
+  energyAmount: 0
+  requireEnergy: 100
+  isCharge: 0
+  levelText: {fileID: 0}
+  energyText: {fileID: 0}
+  requireEnergyText: {fileID: 0}
 --- !u!1 &2754352232453380895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,13 +1256,12 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  playerController: {fileID: 6686249595345664881}
-  robots:
+  playerControllers:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  playerNum: 1
+  canTake: 0
 --- !u!1 &4466737752544826885
 GameObject:
   m_ObjectHideFlags: 0

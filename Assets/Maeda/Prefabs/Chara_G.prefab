@@ -378,6 +378,7 @@ GameObject:
   - component: {fileID: 3023644762317136797}
   - component: {fileID: 1097459846567466548}
   - component: {fileID: 7899680338182301067}
+  - component: {fileID: 6976764828765796719}
   m_Layer: 0
   m_Name: Chara_G
   m_TagString: Player3
@@ -522,6 +523,27 @@ MonoBehaviour:
   playerNum: 3
   MoveSpeed: 3
   haveBattery: 0
+  stanTime: 2
+--- !u!114 &6976764828765796719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2269150857823185960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d1a4784a4d14c448925a3f1f24dd86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level: 1
+  allEnergyAmount: 0
+  energyAmount: 0
+  requireEnergy: 100
+  isCharge: 0
+  levelText: {fileID: 0}
+  energyText: {fileID: 0}
+  requireEnergyText: {fileID: 0}
 --- !u!1 &2497040255480892717
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,6 +711,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  canTake: 0
 --- !u!114 &7650114884405109982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,12 +939,12 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  robots:
+  playerControllers:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  playerNum: 3
+  canTake: 0
 --- !u!1 &2781171798909640388
 GameObject:
   m_ObjectHideFlags: 0
