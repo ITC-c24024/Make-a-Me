@@ -9,7 +9,7 @@ public class CatchRange : ActionScript
     PlayerController playerController;
 
     //取れる判定
-    bool canTake = false;
+    public bool canTake = false;
 
     void Start()
     {
@@ -27,9 +27,11 @@ public class CatchRange : ActionScript
 
     void ChatchBattery()
     {
+        Debug.Log("Catch");
         if (batteryScript != null)
         {
             batteryScript.ChangeOwner(playerController.playerNum, robot);
+            canTake = false;
             playerController.ChangeBatterySC(batteryScript);
         }
     }
@@ -44,7 +46,7 @@ public class CatchRange : ActionScript
             {
                 canTake = true;
                 batteryScript = energyBatterySC;
-            }   
+            }             
         }
     }
 
@@ -53,12 +55,9 @@ public class CatchRange : ActionScript
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
         {
             var energyBatterySC = other.gameObject.GetComponent<EnergyBatteryScript>();
-            //バッテリーが投げられているなら
-            if (energyBatterySC.bombSwitch)
-            {
-                canTake = false;
-                batteryScript = null;
-            }
+            
+            canTake = false;
+            batteryScript = null;           
         }
     }
 }
