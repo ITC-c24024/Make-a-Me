@@ -49,6 +49,11 @@ public class GameController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// インスタンス化したPlayerを配列に格納
+    /// </summary>
+    /// <param name="num">playerの番号</param>
+    /// <param name="player">インスタンス化したPlayerオブジェクト</param>
     public void SetPlayer(int num, GameObject player)
     {
         players[num - 1] = player;
