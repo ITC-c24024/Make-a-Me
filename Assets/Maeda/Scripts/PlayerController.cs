@@ -3,36 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
-
-public class PlayerController : MonoBehaviour
+public class PlayerController : ActionScript
 {
+    [SerializeField]
+    TakeRange takeRangeSC;
+    [SerializeField]
+    CatchRange catchRangeSC;
+    EnergyBatteryScript batteryScript;
+
     //プレイヤーの番号
     public int playerNum = 0;
     
-    [SerializeField,Header("プレイヤーの移動速度")] 
-    float MoveSpeed = 1.0f;
+    [SerializeField,Header("プレイヤーの移動速度")]
+    float MoveSpeed = 1.0f;   
 
-    //移動アクション
-    public InputAction moveAction;
-    //投げるアクション
-    public InputAction throwAction;
-
-    private void Awake()
-    {
-        //ActionMapを取得
-        var input = GetComponent<PlayerInput>();
-        var actionMap = input.currentActionMap;
-        //対応するアクションを取得
-        moveAction = actionMap["Move"];
-        throwAction = actionMap["Throw"];
-    }
+    //バッテリーの所持判定
+    public bool haveBattery = false;
 
     void Start()
     {
-        
+        var gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.SetPlayer(playerNum, this.gameObject);
+        gameController.SelectPrefab(playerNum);
     }
-
+    
     void Update()
     {
         //入力値をVector2型で取得
@@ -48,5 +42,33 @@ public class PlayerController : MonoBehaviour
             //プレイヤーを回転
             transform.rotation = Quaternion.Euler(0, angle, 0);
         }
+
+        //ボタンを押した判定
+        var throwAct = throwAction.triggered;
+        if (haveBattery && throwAct && !isTimer)
+        {
+            haveBattery = false;
+            StartCoroutine(takeRangeSC.PickupDelay());
+            StartCoroutine(catchRangeSC.PickupDelay());
+            
+            batteryScript.Throw();
+        }
+    }
+
+    /// <summary>
+    /// バッテリースクリプトを指定
+    /// </summary>
+    /// <param name="batterySC">TakeRangeで取ったバッテリーのスクリプト</param>
+    public void ChangeBatterySC(EnergyBatteryScript batterySC)
+    {
+        ChangeHaveBattery();
+        batteryScript = batterySC;
+
+        StartCoroutine(PickupDelay());
+    }
+
+    public void ChangeHaveBattery()
+    {
+        haveBattery = !haveBattery;
     }
 }
