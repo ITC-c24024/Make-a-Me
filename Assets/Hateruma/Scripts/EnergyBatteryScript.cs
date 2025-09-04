@@ -39,7 +39,7 @@ public class EnergyBatteryScript : MonoBehaviour
 
         if (ownerObj != null)
         {
-            batteryRB.MovePosition(ownerObj.transform.position + Vector3.up);
+            batteryRB.MovePosition(ownerObj.transform.position + new Vector3(0,1.3f,0));
             batteryRB.MoveRotation(ownerObj.transform.rotation * Quaternion.Euler(0,90,0));
         }
 
@@ -84,7 +84,7 @@ public class EnergyBatteryScript : MonoBehaviour
         ownerObj = null;
         batteryRB.isKinematic = false;
         batteryCol.isTrigger = false;
-        batteryRB.AddForce(ownerForward * throwPower, ForceMode.Impulse);
+        batteryRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
         bombSwitch = true;
     }
 
@@ -92,7 +92,7 @@ public class EnergyBatteryScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤー、床、壁オブジェクトにあたると放電
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.tag.StartsWith("Player") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             if (bombSwitch)
             {
