@@ -25,7 +25,7 @@ public class PlayerController : ActionScript
     [SerializeField, Header("スタン効果時間")]
     float stanTime = 2.0f;
     //スタン判定
-    public bool isStan = false;
+    public bool isStun = false;
 
     void Start()
     {
@@ -34,7 +34,7 @@ public class PlayerController : ActionScript
     
     void Update()
     {
-        if (!isStan)
+        if (!isStun)
         {
             //入力値をVector2型で取得
             Vector2 move = moveAction.ReadValue<Vector2>();
@@ -53,7 +53,7 @@ public class PlayerController : ActionScript
 
         //ボタンを押した判定
         var throwAct = throwAction.triggered;
-        if (haveBattery && throwAct && !isTimer && !isStan)
+        if (haveBattery && throwAct && !isTimer && !isStun)
         {
             ChangeHaveBattery(false);
             StartCoroutine(takeRangeSC.PickupDelay());
@@ -65,7 +65,7 @@ public class PlayerController : ActionScript
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Discharge") && !isStan)
+        if (other.CompareTag("Discharge") && !isStun)
         {
             StartCoroutine(Stan());
         }
@@ -101,9 +101,9 @@ public class PlayerController : ActionScript
     /// <returns></returns>
     IEnumerator Stan()
     {
-        isStan = true;
+        isStun = true;
         ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
-        isStan = false;
+        isStun = false;
     }
 }
