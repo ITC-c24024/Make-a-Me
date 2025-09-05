@@ -54,7 +54,6 @@ public class EnergyBatteryScript : MonoBehaviour
         ownerNum = num;
         ownerObj = player;
         batteryRB.useGravity = false;
-        batteryCol.isTrigger = true;
 
         bombSwitch = false;
 
@@ -78,7 +77,6 @@ public class EnergyBatteryScript : MonoBehaviour
 
         ownerObj = null;
         batteryRB.useGravity = true;
-        batteryCol.isTrigger = false;
         batteryRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
         bombSwitch = true;
     }
