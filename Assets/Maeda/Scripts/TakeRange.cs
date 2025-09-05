@@ -50,7 +50,7 @@ public class TakeRange : ActionScript
             if (ownerNum != 0)
             {
                 //奪った相手の所持判定をfalse
-                playerControllers[ownerNum - 1].ChangeHaveBattery();
+                playerControllers[ownerNum - 1].ChangeHaveBattery(false);
             }
             //バッテリー所持者を自分にする
             canTake = false;

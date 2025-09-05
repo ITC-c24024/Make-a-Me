@@ -55,7 +55,7 @@ public class PlayerController : ActionScript
         var throwAct = throwAction.triggered;
         if (haveBattery && throwAct && !isTimer && !isStan)
         {
-            ChangeHaveBattery();
+            ChangeHaveBattery(false);
             StartCoroutine(takeRangeSC.PickupDelay());
             StartCoroutine(catchRangeSC.PickupDelay());
             
@@ -77,7 +77,7 @@ public class PlayerController : ActionScript
     /// <param name="batterySC">TakeRangeで取ったバッテリーのスクリプト</param>
     public void ChangeBatterySC(EnergyBatteryScript batterySC)
     {
-        ChangeHaveBattery();
+        ChangeHaveBattery(true);
         batteryScript = batterySC;
 
         StartCoroutine(PickupDelay());
@@ -87,9 +87,10 @@ public class PlayerController : ActionScript
     /// バッテリー所持判定を切り替え
     /// チャージ判定を切り替え
     /// </summary>
-    public void ChangeHaveBattery()
+    /// <param name="have">切り替える所持判定</param>
+    public void ChangeHaveBattery(bool have)
     {
-        haveBattery = !haveBattery;
+        haveBattery = have;
 
         energyScript.ChargeSwitch(haveBattery);
     }
@@ -101,7 +102,7 @@ public class PlayerController : ActionScript
     IEnumerator Stan()
     {
         isStan = true;
-        ChangeHaveBattery();
+        ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
         isStan = false;
     }
