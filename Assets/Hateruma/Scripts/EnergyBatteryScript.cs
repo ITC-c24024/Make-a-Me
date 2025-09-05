@@ -126,6 +126,7 @@ public class EnergyBatteryScript : MonoBehaviour
             isDischarge = true;
         }
 
+        batteryRB.useGravity = false;
         batteryCol.enabled = false;
 
         batteryRB.velocity = Vector3.zero;//ˆÚ“®‚ÌŠµ«‚ğƒŠƒZƒbƒg
@@ -153,6 +154,7 @@ public class EnergyBatteryScript : MonoBehaviour
         ownerNum = 0;
         batteryRB.isKinematic = true;
         batteryCol.enabled = true;
+        batteryRB.useGravity = true;
 
         var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
         transform.position = selectObj.transform.position;
