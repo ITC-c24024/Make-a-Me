@@ -63,6 +63,7 @@ public class EnergyBatteryScript : MonoBehaviour
         batteryCol.isTrigger = true;
 
         bombSwitch = false;
+
     }
 
     /// <summary>
@@ -79,7 +80,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// </summary>
     public void Throw()
     {
-        var ownerForward = ownerObj.transform.forward;
+        var ownerForward = Quaternion.AngleAxis(-60, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
         batteryRB.isKinematic = false;
@@ -92,7 +93,7 @@ public class EnergyBatteryScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤー、床、壁オブジェクトにあたると放電
-        if (collision.gameObject.tag.StartsWith("Player") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.tag.StartsWith("P") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             if (bombSwitch)
             {
@@ -156,6 +157,6 @@ public class EnergyBatteryScript : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         batteryRB.isKinematic = false;
-        batteryRB.AddForce(selectObj.transform.forward * throwPower / 2, ForceMode.Impulse);
+        batteryRB.AddForce(selectObj.transform.forward * throwPower / 2,ForceMode.Impulse);
     }
 }

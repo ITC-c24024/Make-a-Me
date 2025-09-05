@@ -5,8 +5,14 @@ using UnityEngine.UI;
 
 public class EnergyScript : MonoBehaviour
 {
-    public int level = 1;//レベル
-    int maxLevel = 5;//最大レベル
+    [SerializeField,Header("プレイヤー番号")] 
+    int playerNum;
+
+    //レベル
+    public int level = 1;
+
+    //最大レベル
+    int maxLevel = 5;
 
     [SerializeField, Header("総取得エネルギー")]
     int allEnergyAmount;
@@ -20,11 +26,20 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("チャージ中")]
     bool isCharge;
 
-    float timer = 0;//チャージ用タイマー
+    //チャージ用タイマー
+    float timer = 0;
+
+    //ドロップマネージャースクリプト
+    DropEnergyManagerScript dropManagerSC;
 
     [SerializeField] Text levelText;
     [SerializeField] Text energyText;
     [SerializeField] Text requireEnergyText;
+
+    private void Start()
+    {
+        dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
+    }
     void Update()
     {
         if (isCharge)
@@ -39,15 +54,15 @@ public class EnergyScript : MonoBehaviour
             }
         }
 
-        energyText.text = $"{energyAmount}";
-        requireEnergyText.text = $"{requireEnergy}";
+        energyText.text = $"energy:{energyAmount}";
+        requireEnergyText.text = $"require:{requireEnergy}";
     }
 
     /// <summary>
     /// エネルギーのチャージ
     /// </summary>
     /// <param name="amount">取得量</param>
-    void ChargeEnergy(int amount)
+    public void ChargeEnergy(int amount)
     {
         if(level < maxLevel)
         {
@@ -71,18 +86,24 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LostEnergy()
     {
-        var amount = allEnergyAmount / 3;
-        allEnergyAmount -= amount;
-
-        while (amount > energyAmount)
+        if(allEnergyAmount > 0)
         {
-            amount -= energyAmount;
-            LevelDown();
-        }
+            var amount = allEnergyAmount / 3;
 
-        if(amount > 0)
-        {
-            energyAmount -= amount;
+            dropManagerSC.Drop(amount);
+
+            allEnergyAmount -= amount;
+
+            while (amount > energyAmount)
+            {
+                amount -= energyAmount;
+                LevelDown();
+            }
+
+            if (amount > 0)
+            {
+                energyAmount -= amount;
+            }
         }
     }
 
@@ -95,7 +116,7 @@ public class EnergyScript : MonoBehaviour
         requireEnergy += 50;
         energyAmount = 0;
 
-        levelText.text = $"{level}";
+        levelText.text = $"level:{level}";
     }
 
     /// <summary>
@@ -107,7 +128,7 @@ public class EnergyScript : MonoBehaviour
         requireEnergy -= 50;
         energyAmount = requireEnergy;
 
-        levelText.text = $"{level}";
+        levelText.text = $"level:{level}";
     }
 
     /// <summary>
@@ -124,6 +145,8 @@ public class EnergyScript : MonoBehaviour
         if (other.CompareTag("Discharge"))
         {
             LostEnergy();
+
+            Debug.Log("hoge");
         }
     }
 }
