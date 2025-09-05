@@ -10,6 +10,8 @@ public class PlayerController : ActionScript
     [SerializeField]
     CatchRange catchRangeSC;
     EnergyBatteryScript batteryScript;
+    [SerializeField, Header("エネルギー管理スクリプト")]
+    EnergyScript energyScript;
 
     //プレイヤーの番号
     public int playerNum = 0;
@@ -28,8 +30,6 @@ public class PlayerController : ActionScript
     void Start()
     {
         var gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.SetPlayer(playerNum, this.gameObject);
-        gameController.SelectPrefab(playerNum);
     }
     
     void Update()
@@ -74,10 +74,13 @@ public class PlayerController : ActionScript
 
     /// <summary>
     /// バッテリー所持判定を切り替え
+    /// チャージ判定を切り替え
     /// </summary>
     public void ChangeHaveBattery()
     {
         haveBattery = !haveBattery;
+
+        energyScript.ChargeSwitch(haveBattery);
     }
 
     /// <summary>
