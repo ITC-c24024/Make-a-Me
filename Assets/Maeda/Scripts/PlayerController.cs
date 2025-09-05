@@ -10,7 +10,7 @@ public class PlayerController : ActionScript
     [SerializeField]
     CatchRange catchRangeSC;
     EnergyBatteryScript batteryScript;
-    [SerializeField, Header("エネルギー管理スクリプト")]
+    //エネルギー管理スクリプト
     EnergyScript energyScript;
 
     //プレイヤーの番号
@@ -29,34 +29,45 @@ public class PlayerController : ActionScript
 
     void Start()
     {
-        var gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        energyScript = GetComponent<EnergyScript>();
     }
     
     void Update()
     {
-        //入力値をVector2型で取得
-        Vector2 move = moveAction.ReadValue<Vector2>();
-
-        //プレイヤーを移動
-        transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
-
-        if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+        if (!isStan)
         {
-            //スティックの角度を計算
-            float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
-            //プレイヤーを回転
-            transform.rotation = Quaternion.Euler(0, angle, 0);
-        }
+            //入力値をVector2型で取得
+            Vector2 move = moveAction.ReadValue<Vector2>();
+
+            //プレイヤーを移動
+            transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
+
+            if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+            {
+                //スティックの角度を計算
+                float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
+                //プレイヤーを回転
+                transform.rotation = Quaternion.Euler(0, angle, 0);
+            }
+        }      
 
         //ボタンを押した判定
         var throwAct = throwAction.triggered;
-        if (haveBattery && throwAct && !isTimer)
+        if (haveBattery && throwAct && !isTimer && !isStan)
         {
-            haveBattery = false;
+            ChangeHaveBattery(false);
             StartCoroutine(takeRangeSC.PickupDelay());
             StartCoroutine(catchRangeSC.PickupDelay());
             
             batteryScript.Throw();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Discharge"))
+        {
+            StartCoroutine(Stan());
         }
     }
 
@@ -66,7 +77,7 @@ public class PlayerController : ActionScript
     /// <param name="batterySC">TakeRangeで取ったバッテリーのスクリプト</param>
     public void ChangeBatterySC(EnergyBatteryScript batterySC)
     {
-        ChangeHaveBattery();
+        ChangeHaveBattery(true);
         batteryScript = batterySC;
 
         StartCoroutine(PickupDelay());
@@ -76,9 +87,10 @@ public class PlayerController : ActionScript
     /// バッテリー所持判定を切り替え
     /// チャージ判定を切り替え
     /// </summary>
-    public void ChangeHaveBattery()
+    /// <param name="have">切り替える所持判定</param>
+    public void ChangeHaveBattery(bool have)
     {
-        haveBattery = !haveBattery;
+        haveBattery = have;
 
         energyScript.ChargeSwitch(haveBattery);
     }
@@ -87,9 +99,10 @@ public class PlayerController : ActionScript
     /// スタン処理
     /// </summary>
     /// <returns></returns>
-    public IEnumerator Stan()
+    IEnumerator Stan()
     {
         isStan = true;
+        ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
         isStan = false;
     }
