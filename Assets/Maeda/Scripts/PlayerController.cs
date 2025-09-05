@@ -10,7 +10,7 @@ public class PlayerController : ActionScript
     [SerializeField]
     CatchRange catchRangeSC;
     EnergyBatteryScript batteryScript;
-    [SerializeField, Header("エネルギー管理スクリプト")]
+    //エネルギー管理スクリプト
     EnergyScript energyScript;
 
     //プレイヤーの番号
@@ -29,34 +29,45 @@ public class PlayerController : ActionScript
 
     void Start()
     {
-        var gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        energyScript = GetComponent<EnergyScript>();
     }
     
     void Update()
     {
-        //入力値をVector2型で取得
-        Vector2 move = moveAction.ReadValue<Vector2>();
-
-        //プレイヤーを移動
-        transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
-
-        if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+        if (!isStan)
         {
-            //スティックの角度を計算
-            float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
-            //プレイヤーを回転
-            transform.rotation = Quaternion.Euler(0, angle, 0);
-        }
+            //入力値をVector2型で取得
+            Vector2 move = moveAction.ReadValue<Vector2>();
+
+            //プレイヤーを移動
+            transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
+
+            if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+            {
+                //スティックの角度を計算
+                float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
+                //プレイヤーを回転
+                transform.rotation = Quaternion.Euler(0, angle, 0);
+            }
+        }      
 
         //ボタンを押した判定
         var throwAct = throwAction.triggered;
-        if (haveBattery && throwAct && !isTimer)
+        if (haveBattery && throwAct && !isTimer && !isStan)
         {
-            haveBattery = false;
+            ChangeHaveBattery();
             StartCoroutine(takeRangeSC.PickupDelay());
             StartCoroutine(catchRangeSC.PickupDelay());
             
             batteryScript.Throw();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Discharge"))
+        {
+            isStan = true;
         }
     }
 
@@ -87,7 +98,7 @@ public class PlayerController : ActionScript
     /// スタン処理
     /// </summary>
     /// <returns></returns>
-    public IEnumerator Stan()
+    IEnumerator Stan()
     {
         isStan = true;
         yield return new WaitForSeconds(stanTime);

@@ -41,9 +41,9 @@ public class TakeRange : ActionScript
     /// </summary>
     void TakeBattery()
     {
-        Debug.Log("take");
         if (batteryScript != null)
         {
+            Debug.Log("take");
             var ownerNum = batteryScript.OwnerCheck();
             
             //バッテリーの所持者がいるとき
