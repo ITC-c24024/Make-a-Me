@@ -67,7 +67,7 @@ public class PlayerController : ActionScript
     {
         if (other.CompareTag("Discharge"))
         {
-            isStan = true;
+            StartCoroutine(Stan());
         }
     }
 
@@ -101,6 +101,7 @@ public class PlayerController : ActionScript
     IEnumerator Stan()
     {
         isStan = true;
+        ChangeHaveBattery();
         yield return new WaitForSeconds(stanTime);
         isStan = false;
     }
