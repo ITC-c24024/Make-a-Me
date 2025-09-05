@@ -25,7 +25,7 @@ public class PlayerController : ActionScript
     [SerializeField, Header("スタン効果時間")]
     float stanTime = 2.0f;
     //スタン判定
-    bool isStan = false;
+    public bool isStan = false;
 
     void Start()
     {
@@ -65,7 +65,7 @@ public class PlayerController : ActionScript
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Discharge"))
+        if (other.CompareTag("Discharge") && !isStan)
         {
             StartCoroutine(Stan());
         }
