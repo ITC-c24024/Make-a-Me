@@ -100,11 +100,16 @@ public class EnergyBatteryScript : MonoBehaviour
                 StartCoroutine(Discharge());
             }
         }
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
         //放電に当たると連鎖する
-        else if (collision.gameObject.CompareTag("Discharge"))
+        if (other.gameObject.CompareTag("Discharge"))
         {
             //連鎖元のバッテリーの所有者を特定
-            var playerNum = collision.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
+            var playerNum = other.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
             ownerNum = playerNum;
 
             StartCoroutine(Discharge());//放電
