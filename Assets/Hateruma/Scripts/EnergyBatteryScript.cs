@@ -87,7 +87,10 @@ public class EnergyBatteryScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤー、床、壁オブジェクトにあたると放電
-        if (collision.gameObject.tag.StartsWith("P") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.tag.StartsWith("P") ||
+            collision.gameObject.CompareTag("Floor") || 
+            collision.gameObject.CompareTag("Wall")|| 
+            collision.gameObject.CompareTag("Battery"))
         {
             if (bombSwitch)
             {
