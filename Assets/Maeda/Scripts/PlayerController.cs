@@ -87,7 +87,7 @@ public class PlayerController : ActionScript
     /// バッテリー所持判定を切り替え
     /// チャージ判定を切り替え
     /// </summary>
-    /// <param name="have">切り替える所持判定</param>
+    /// <param name="have">所持判定に代入するbool</param>
     public void ChangeHaveBattery(bool have)
     {
         haveBattery = have;
