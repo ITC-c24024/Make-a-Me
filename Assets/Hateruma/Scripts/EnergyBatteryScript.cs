@@ -36,16 +36,10 @@ public class EnergyBatteryScript : MonoBehaviour
 
     void FixedUpdate()
     {
-
         if (ownerObj != null)
         {
             batteryRB.MovePosition(ownerObj.transform.position + new Vector3(0,1.2f,0));
             batteryRB.MoveRotation(ownerObj.transform.rotation * Quaternion.Euler(0,90,0));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Throw();
         }
     }
 
@@ -59,7 +53,7 @@ public class EnergyBatteryScript : MonoBehaviour
     {
         ownerNum = num;
         ownerObj = player;
-        batteryRB.isKinematic = true;
+        batteryRB.useGravity = false;
         batteryCol.isTrigger = true;
 
         bombSwitch = false;
@@ -83,7 +77,7 @@ public class EnergyBatteryScript : MonoBehaviour
         var ownerForward = Quaternion.AngleAxis(-60, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
-        batteryRB.isKinematic = false;
+        batteryRB.useGravity = true;
         batteryCol.isTrigger = false;
         batteryRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
         bombSwitch = true;
@@ -132,8 +126,12 @@ public class EnergyBatteryScript : MonoBehaviour
             isDischarge = true;
         }
 
+        batteryCol.enabled = false;
+
         batteryRB.velocity = Vector3.zero;//移動の慣性をリセット
         batteryRB.angularVelocity = Vector3.zero;//回転の慣性をリセット
+
+        ownerObj = null;
 
         //放電範囲を表示
         dischargeObj.SetActive(true);
