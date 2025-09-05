@@ -32,6 +32,9 @@ public class EnergyScript : MonoBehaviour
     //ドロップマネージャースクリプト
     DropEnergyManagerScript dropManagerSC;
 
+    //プレイヤーコントローラースクリプト
+    PlayerController playerControllerSC;
+
     [SerializeField] Text levelText;
     [SerializeField] Text energyText;
     [SerializeField] Text requireEnergyText;
@@ -39,6 +42,7 @@ public class EnergyScript : MonoBehaviour
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
+        playerControllerSC = gameObject.GetComponent<PlayerController>();
     }
     void Update()
     {
@@ -144,9 +148,10 @@ public class EnergyScript : MonoBehaviour
     {
         if (other.CompareTag("Discharge"))
         {
-            LostEnergy();
-
-            Debug.Log("hoge");
+            if (!playerControllerSC.isStun)
+            {
+                LostEnergy();
+            }
         }
     }
 }
