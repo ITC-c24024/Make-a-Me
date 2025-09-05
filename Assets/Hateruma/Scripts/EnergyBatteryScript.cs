@@ -152,6 +152,7 @@ public class EnergyBatteryScript : MonoBehaviour
     {
         ownerNum = 0;
         batteryRB.isKinematic = true;
+        batteryCol.enabled = true;
 
         var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
         transform.position = selectObj.transform.position;
