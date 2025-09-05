@@ -39,7 +39,7 @@ public class EnergyBatteryScript : MonoBehaviour
 
         if (ownerObj != null)
         {
-            batteryRB.MovePosition(ownerObj.transform.position + new Vector3(0,1.3f,0));
+            batteryRB.MovePosition(ownerObj.transform.position + new Vector3(0,1.2f,0));
             batteryRB.MoveRotation(ownerObj.transform.rotation * Quaternion.Euler(0,90,0));
         }
 
