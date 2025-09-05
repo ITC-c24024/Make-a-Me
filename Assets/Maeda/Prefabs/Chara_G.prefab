@@ -519,9 +519,11 @@ MonoBehaviour:
     m_Flags: 0
   takeRangeSC: {fileID: 2379594897632897317}
   catchRangeSC: {fileID: 6379782965045710690}
+  energyScript: {fileID: 0}
   playerNum: 3
   MoveSpeed: 3
   haveBattery: 0
+  stanTime: 2
 --- !u!1 &2497040255480892717
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,6 +691,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  canTake: 0
 --- !u!114 &7650114884405109982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,12 +919,12 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  robots:
+  playerControllers:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  playerNum: 3
+  canTake: 0
 --- !u!1 &2781171798909640388
 GameObject:
   m_ObjectHideFlags: 0
