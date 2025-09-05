@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class ScoreScript : MonoBehaviour
 {
+    [SerializeField]
+    EnergyScript energyScript;
+
     public float maxTime = 10f;
     [SerializeField] float workTime = 0f;
+    //ì‹ÆŒø—¦
+    private float[] efficiency = new float[] { 1.0f, 1.5f, 2.5f, 4.0f, 6.0f };
 
     [SerializeField] int score = 0;
     [SerializeField] bool isWork = false;
@@ -23,7 +28,7 @@ public class ScoreScript : MonoBehaviour
     {
         if (isWork)
         {
-            workTime += Time.deltaTime;
+            workTime += Time.deltaTime * efficiency[energyScript.level];
         }
 
         if(workTime >= maxTime)
@@ -32,8 +37,6 @@ public class ScoreScript : MonoBehaviour
             score += 1;
         }
     }
-
-
 
     private void OnTriggerStay(Collider other)
     {
