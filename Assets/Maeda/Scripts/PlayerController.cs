@@ -101,6 +101,8 @@ public class PlayerController : ActionScript
     /// <returns></returns>
     IEnumerator Stan()
     {
+        //エネルギードロップ
+        energyScript.LostEnergy();
         isStun = true;
         ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
