@@ -28,7 +28,7 @@ public class ScoreScript : MonoBehaviour
     {
         if (isWork)
         {
-            workTime += Time.deltaTime * efficiency[energyScript.level];
+            workTime += Time.deltaTime * efficiency[energyScript.level-1];
         }
 
         if(workTime >= maxTime)
