@@ -58,8 +58,8 @@ public class EnergyScript : MonoBehaviour
             }
         }
 
-        energyText.text = $"energy:{energyAmount}";
-        requireEnergyText.text = $"require:{requireEnergy}";
+        //energyText.text = $"energy:{energyAmount}";
+        //requireEnergyText.text = $"require:{requireEnergy}";
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class EnergyScript : MonoBehaviour
         requireEnergy += 50;
         energyAmount = 0;
 
-        levelText.text = $"level:{level}";
+        //levelText.text = $"level:{level}";
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ public class EnergyScript : MonoBehaviour
         requireEnergy -= 50;
         energyAmount = requireEnergy;
 
-        levelText.text = $"level:{level}";
+        //levelText.text = $"level:{level}";
     }
 
     /// <summary>

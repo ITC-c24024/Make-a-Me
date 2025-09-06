@@ -133,22 +133,22 @@ public class DropEnergyScript : MonoBehaviour
         var pz = Mathf.Sin(rad) * 3f + currentPos.z;
 
         //ターゲット地点がステージ外にならないようにする
-        if (px <= -9f)//X軸
+        if (px <= -16.5f)//X軸
         {
-            px = -9f;
+            px = -16.5f;
         }
-        else if (px >= 9f)
+        else if (px >= 16.5f)
         {
-            px = 9f;
+            px = 16.5f;
         }
 
-        if (pz <= -5.5f)//Z軸
+        if (pz <= -12f)//Z軸
         {
-            pz = -5.5f;
+            pz = -12f;
         }
-        else if (pz >= 3.2f)
+        else if (pz >= 1f)
         {
-            pz = 3.2f;
+            pz = 1f;
         }
         targetPos = new Vector3(px, currentPos.y, pz);
 

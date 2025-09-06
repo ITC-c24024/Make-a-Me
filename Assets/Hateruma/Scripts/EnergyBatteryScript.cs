@@ -24,9 +24,6 @@ public class EnergyBatteryScript : MonoBehaviour
     //バッテリーオブジェクトのRigidbody
     Rigidbody batteryRB;
 
-    //バッテリーオブジェクトのCollider
-    Collider batteryCol;
-
     //放電可能かどうかのスイッチ
     public bool bombSwitch;
 
@@ -36,7 +33,6 @@ public class EnergyBatteryScript : MonoBehaviour
     void Start()
     {
         batteryRB = gameObject.GetComponent<Rigidbody>();
-        batteryCol = gameObject.GetComponent<Collider>();
     }
 
     void FixedUpdate()
@@ -81,10 +77,14 @@ public class EnergyBatteryScript : MonoBehaviour
     /// </summary>
     public void Throw()
     {
-        var ownerForward = Quaternion.AngleAxis(-60, ownerObj.transform.right) * ownerObj.transform.forward;
+        var ownerForward = Quaternion.AngleAxis(-5, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
         batteryRB.isKinematic = false;
+
+        batteryRB.velocity = Vector3.zero;
+        batteryRB.angularVelocity = Vector3.zero;
+
         batteryRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
         bombSwitch = true;
     }
@@ -161,7 +161,7 @@ public class EnergyBatteryScript : MonoBehaviour
 
         var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
         transform.position = selectObj.transform.position;
-        transform.rotation = selectObj.transform.rotation;
+        transform.rotation = selectObj.transform.rotation * Quaternion.Euler(0,90,0);
 
         yield return new WaitForSeconds(2);
 
