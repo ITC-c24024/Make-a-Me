@@ -21,12 +21,17 @@ public class EnergyBatteryScript : MonoBehaviour
     [SerializeField, Header("リスポーン場所のオブジェクト")]
     GameObject[] respawnObj;
 
-    Rigidbody batteryRB;//バッテリーオブジェクトのRigidbody
-    Collider batteryCol;//バッテリーオブジェクトのCollider
+    //バッテリーオブジェクトのRigidbody
+    Rigidbody batteryRB;
 
-    public bool bombSwitch;//放電可能かどうかのスイッチ
+    //バッテリーオブジェクトのCollider
+    Collider batteryCol;
 
-    bool isDischarge;//放電重複しないようにするフラグ
+    //放電可能かどうかのスイッチ
+    public bool bombSwitch;
+
+    //放電重複しないようにするフラグ
+    bool isDischarge;
 
     void Start()
     {
@@ -38,8 +43,8 @@ public class EnergyBatteryScript : MonoBehaviour
     {
         if (ownerObj != null)
         {
-            batteryRB.MovePosition(ownerObj.transform.position + new Vector3(0,1.2f,0));
-            batteryRB.MoveRotation(ownerObj.transform.rotation * Quaternion.Euler(0,90,0));
+            transform.position = ownerObj.transform.position + new Vector3(0, 1.2f, 0);
+            transform.rotation = ownerObj.transform.rotation * Quaternion.Euler(0, 90, 0);
         }
     }
 
@@ -49,14 +54,17 @@ public class EnergyBatteryScript : MonoBehaviour
     /// </summary>
     /// <param name="num">プレイヤーナンバー</param>
     /// <param name="player">プレイヤーのオブジェクト</param>
-    public void ChangeOwner(int num, GameObject player)
+    public bool ChangeOwner(int num, GameObject player)
     {
+        if (isDischarge) return false;
+        
         ownerNum = num;
         ownerObj = player;
-        batteryRB.useGravity = false;
+        batteryRB.isKinematic = true;
 
         bombSwitch = false;
 
+        return true;
     }
 
     /// <summary>
@@ -76,7 +84,7 @@ public class EnergyBatteryScript : MonoBehaviour
         var ownerForward = Quaternion.AngleAxis(-60, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
-        batteryRB.useGravity = true;
+        batteryRB.isKinematic = false;
         batteryRB.AddForce(ownerForward * throwPower,ForceMode.Impulse);
         bombSwitch = true;
     }
@@ -105,7 +113,7 @@ public class EnergyBatteryScript : MonoBehaviour
         {
             //連鎖元のバッテリーの所有者を特定
             var playerNum = other.gameObject.transform.parent.GetComponent<EnergyBatteryScript>().OwnerCheck();
-            ownerNum = playerNum;
+            ownerNum = playerNum;//ホーミング処理の名残り
 
             StartCoroutine(Discharge());//放電
         }
@@ -127,11 +135,7 @@ public class EnergyBatteryScript : MonoBehaviour
             isDischarge = true;
         }
 
-        batteryRB.useGravity = false;
-        batteryCol.enabled = false;
-
-        batteryRB.velocity = Vector3.zero;//移動の慣性をリセット
-        batteryRB.angularVelocity = Vector3.zero;//回転の慣性をリセット
+        batteryRB.isKinematic = true;
 
         ownerObj = null;
 
@@ -153,9 +157,7 @@ public class EnergyBatteryScript : MonoBehaviour
     IEnumerator Respawn()
     {
         ownerNum = 0;
-        batteryRB.isKinematic = true;
-        batteryCol.enabled = true;
-        batteryRB.useGravity = true;
+
 
         var selectObj = respawnObj[Random.Range(0, respawnObj.Length)];
         transform.position = selectObj.transform.position;

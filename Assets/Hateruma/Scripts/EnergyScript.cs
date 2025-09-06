@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EnergyScript : MonoBehaviour
 {
-    [SerializeField,Header("プレイヤー番号")] 
+    [SerializeField, Header("プレイヤー番号")]
     int playerNum;
 
     //レベル
@@ -68,7 +68,7 @@ public class EnergyScript : MonoBehaviour
     /// <param name="amount">取得量</param>
     public void ChargeEnergy(int amount)
     {
-        if(level < maxLevel)
+        if (level < maxLevel)
         {
             allEnergyAmount += amount;
 
@@ -88,10 +88,11 @@ public class EnergyScript : MonoBehaviour
     /// <summary>
     /// エネルギーのドロップ(総量の1/3)
     /// </summary>
-    void LostEnergy()
+    public void LostEnergy()
     {
-        if(allEnergyAmount > 0)
+        if (allEnergyAmount > 0)
         {
+
             var amount = allEnergyAmount / 3;
 
             dropManagerSC.Drop(amount);
@@ -142,16 +143,5 @@ public class EnergyScript : MonoBehaviour
     public void ChargeSwitch(bool charge)
     {
         isCharge = charge;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Discharge"))
-        {
-            if (!playerControllerSC.isStun)
-            {
-                LostEnergy();
-            }
-        }
     }
 }

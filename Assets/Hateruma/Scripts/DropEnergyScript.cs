@@ -124,7 +124,7 @@ public class DropEnergyScript : MonoBehaviour
         dropEnergyAmount = amount;
 
         //プレイヤーのポジションでドロップ
-        currentPos = playerObj.transform.localPosition;
+        currentPos = playerObj.transform.position;
 
         //ドロップ地点から半径3の円周上のランダムな地点にターゲットを指定
         var angle = Random.Range(0, 360);
@@ -225,6 +225,6 @@ public class DropEnergyScript : MonoBehaviour
     /// </summary>
     void PosReset()
     {
-        this.transform.localPosition = startPos;
+        this.transform.position = startPos;
     }
 }
