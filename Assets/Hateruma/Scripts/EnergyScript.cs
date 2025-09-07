@@ -32,17 +32,28 @@ public class EnergyScript : MonoBehaviour
     //ドロップマネージャースクリプト
     DropEnergyManagerScript dropManagerSC;
 
-    //プレイヤーコントローラースクリプト
-    PlayerController playerControllerSC;
+    [SerializeField,Header("エネルギー量表示用スライダー")] 
+    Slider energySlider;
 
-    [SerializeField] Text levelText;
-    [SerializeField] Text energyText;
-    [SerializeField] Text requireEnergyText;
+    [SerializeField, Header("スライダー表示時間(秒)")]
+    float sliderDisplayTime = 3f;
 
+    //スライダー表示コルーチン用
+    Coroutine showRoutine;
+
+    //スライダーの座標
+    Transform sliderPos;
+
+    //カメラ
+    Camera mainCam;
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
-        playerControllerSC = gameObject.GetComponent<PlayerController>();
+        energySlider.maxValue = requireEnergy;
+
+        sliderPos = energySlider.transform;
+
+        mainCam = Camera.main;
     }
     void Update()
     {
@@ -58,8 +69,15 @@ public class EnergyScript : MonoBehaviour
             }
         }
 
-        //energyText.text = $"energy:{energyAmount}";
-        //requireEnergyText.text = $"require:{requireEnergy}";
+        if (sliderPos != null)
+        {
+            // プレイヤーの頭上に追従
+            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2.5f, 0));
+            sliderPos.position = screenPos;
+
+            // カメラの方向を向く（ビルボード）
+            sliderPos.forward = mainCam.transform.forward;
+        }
     }
 
     /// <summary>
@@ -81,8 +99,11 @@ public class EnergyScript : MonoBehaviour
             if (amount > 0)
             {
                 energyAmount += amount;
+                energySlider.value = energyAmount;
             }
         }
+
+        ShowSlider();
     }
 
     /// <summary>
@@ -92,7 +113,6 @@ public class EnergyScript : MonoBehaviour
     {
         if (allEnergyAmount > 0)
         {
-
             var amount = allEnergyAmount / 3;
 
             dropManagerSC.Drop(amount);
@@ -108,8 +128,11 @@ public class EnergyScript : MonoBehaviour
             if (amount > 0)
             {
                 energyAmount -= amount;
+                energySlider.value = energyAmount;
             }
         }
+
+        ShowSlider();
     }
 
     /// <summary>
@@ -121,7 +144,8 @@ public class EnergyScript : MonoBehaviour
         requireEnergy += 50;
         energyAmount = 0;
 
-        //levelText.text = $"level:{level}";
+        energySlider.maxValue += 50;
+        energySlider.value = 0;
     }
 
     /// <summary>
@@ -133,7 +157,8 @@ public class EnergyScript : MonoBehaviour
         requireEnergy -= 50;
         energyAmount = requireEnergy;
 
-        //levelText.text = $"level:{level}";
+        energySlider.maxValue -= 50;
+        energySlider.value = requireEnergy;
     }
 
     /// <summary>
@@ -143,5 +168,25 @@ public class EnergyScript : MonoBehaviour
     public void ChargeSwitch(bool charge)
     {
         isCharge = charge;
+    }
+
+    void ShowSlider()
+    {
+        if (showRoutine != null)
+        {
+            StopCoroutine(showRoutine);
+        }
+
+        showRoutine = StartCoroutine(ShowSliderRoutine());
+    }
+
+    IEnumerator ShowSliderRoutine()
+    {
+        energySlider.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(sliderDisplayTime);
+
+        energySlider.gameObject.SetActive(false);
+        showRoutine = null;
     }
 }
