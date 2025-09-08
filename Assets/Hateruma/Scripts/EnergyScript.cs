@@ -44,8 +44,8 @@ public class EnergyScript : MonoBehaviour
     //スライダー表示コルーチン用
     Coroutine showRoutine;
 
-    //スライダーの座標
-    Transform sliderPos;
+    //UIの座標
+    Transform uiPos;
 
     //カメラ
     Camera mainCam;
@@ -58,7 +58,7 @@ public class EnergyScript : MonoBehaviour
 
         energySlider.maxValue = requireEnergy;
 
-        sliderPos = energySlider.transform;
+        uiPos = energyUIObj.transform;
 
         mainCam = Camera.main;
     }
@@ -76,14 +76,14 @@ public class EnergyScript : MonoBehaviour
             }
         }
 
-        if (sliderPos != null)
+        if (uiPos != null)
         {
             // プレイヤーの頭上に追従
             Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2.5f, 0));
-            sliderPos.position = screenPos;
+            uiPos.position = screenPos;
 
             // カメラの方向を向く（ビルボード）
-            sliderPos.forward = mainCam.transform.forward;
+            uiPos.forward = mainCam.transform.forward;
         }
     }
 
