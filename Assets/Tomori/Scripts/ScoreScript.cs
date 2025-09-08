@@ -6,6 +6,8 @@ public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
     EnergyScript energyScript;
+    [SerializeField]
+    PlayerController playerController;
 
     public float maxTime = 10f;
     [SerializeField] float workTime = 0f;
@@ -43,6 +45,7 @@ public class ScoreScript : MonoBehaviour
         if(other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isWork = true;
+            playerController.Job(isWork);
         }
     }
 
@@ -51,6 +54,7 @@ public class ScoreScript : MonoBehaviour
         if (other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isWork = false;
+            playerController.Job(isWork);
         }
     }
 }
