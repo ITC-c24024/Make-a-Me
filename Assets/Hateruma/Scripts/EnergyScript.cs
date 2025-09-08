@@ -32,7 +32,10 @@ public class EnergyScript : MonoBehaviour
     //ドロップマネージャースクリプト
     DropEnergyManagerScript dropManagerSC;
 
-    [SerializeField,Header("エネルギー量表示用スライダー")] 
+    [SerializeField, Header("エネルギー量表示用UI")]
+    GameObject energyUIObj;
+
+    [SerializeField, Header("エネルギー量表示用スライダー")]
     Slider energySlider;
 
     [SerializeField, Header("スライダー表示時間(秒)")]
@@ -52,6 +55,7 @@ public class EnergyScript : MonoBehaviour
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
+
         energySlider.maxValue = requireEnergy;
 
         sliderPos = energySlider.transform;
