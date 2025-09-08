@@ -46,6 +46,9 @@ public class EnergyScript : MonoBehaviour
 
     //カメラ
     Camera mainCam;
+
+    [SerializeField, Header("ハンマーオブジェクト")]
+    GameObject[] hammerObj;
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
@@ -140,6 +143,9 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LevelUp()
     {
+        hammerObj[level - 1].SetActive(false);
+        hammerObj[level].SetActive(true);
+
         level++;
         requireEnergy += 50;
         energyAmount = 0;
@@ -153,6 +159,9 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LevelDown()
     {
+        hammerObj[level - 1].SetActive(false);
+        hammerObj[level - 2].SetActive(true);
+
         level--;
         requireEnergy -= 50;
         energyAmount = requireEnergy;
