@@ -7,8 +7,14 @@ using UnityEngine.InputSystem;
 
 public class GameController : MonoBehaviour
 {
+    TimerScript timerScript;
+
     void Start()
     {
         Application.targetFrameRate = 60;
+
+        timerScript = this.GetComponent<TimerScript>();
+
+        StartCoroutine(timerScript.Timer());
     }
 }
