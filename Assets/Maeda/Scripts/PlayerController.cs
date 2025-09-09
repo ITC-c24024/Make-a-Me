@@ -27,9 +27,12 @@ public class PlayerController : ActionScript
     //スタン判定
     public bool isStun = false;
 
+    Animator animator;
+
     void Start()
     {
         energyScript = GetComponent<EnergyScript>();
+        animator = GetComponent<Animator>();
     }
     
     void Update()
@@ -39,8 +42,17 @@ public class PlayerController : ActionScript
             //入力値をVector2型で取得
             Vector2 move = moveAction.ReadValue<Vector2>();
 
-            //プレイヤーを移動
-            transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
+            if(move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+            {
+                animator.SetBool("Iswalk", true);
+
+                //プレイヤーを移動
+                transform.position += new Vector3(move.x, 0, move.y) * MoveSpeed * Time.deltaTime;
+            }
+            else
+            {
+                animator.SetBool("Iswalk", false);
+            }
 
             if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
             {
@@ -60,6 +72,7 @@ public class PlayerController : ActionScript
             StartCoroutine(catchRangeSC.PickupDelay());
             
             batteryScript.Throw();
+            animator.SetTrigger("IsThrow");
         }
     }
 
@@ -91,6 +104,7 @@ public class PlayerController : ActionScript
     public void ChangeHaveBattery(bool have)
     {
         haveBattery = have;
+        animator.SetBool("IsHave", haveBattery);
 
         energyScript.ChargeSwitch(haveBattery);
     }
@@ -103,9 +117,17 @@ public class PlayerController : ActionScript
     {
         //エネルギードロップ
         energyScript.LostEnergy();
+
+        animator.SetBool("Isstun", true);
         isStun = true;
         ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
         isStun = false;
+        animator.SetBool("Isstun", false);
+    }
+
+    public void Job(bool isWalk)
+    {
+        animator.SetBool("IsJob", isWalk);
     }
 }
