@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ab2c096deaab2e3439b0b079d95ed4da
+guid: b95005895906fce4cbd5b847b2f8c1c0
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Walk
+      name: The Job
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 0
-      lastFrame: 12
+      firstFrame: 70
+      lastFrame: 90
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
