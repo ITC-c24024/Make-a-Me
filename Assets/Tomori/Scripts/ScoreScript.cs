@@ -9,6 +9,8 @@ public class ScoreScript : MonoBehaviour
     EnergyScript energyScript;
     [SerializeField]
     PlayerController playerController;
+    [SerializeField]
+    ScoreManager scoreManager;
 
     [SerializeField, Header("ÉXÉRÉAUI")]
     Image[] scoreImage;
@@ -41,6 +43,7 @@ public class ScoreScript : MonoBehaviour
         {
             workTime = 0;
             score += 1;
+            scoreManager.ChangeScore(playerController.playerNum);
             SetUI();
         }
     }
