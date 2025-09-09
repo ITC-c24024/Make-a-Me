@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -10,12 +11,15 @@ public class ScoreManager : MonoBehaviour
         public int rank;
     }
     Player[] players = new Player[4];
+    
+    
 
     void Start()
     {
         for (int i = 0; i < players.Length; i++)
         {
             players[i] = new Player();
+            players[i].rank = 4;
         }
     }
 
@@ -35,17 +39,11 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     void Ranking()
     {
-        for (int i = 0; i < players.Length; i++)
+        var sorted = players.OrderBy(score => score).ToArray();
+        
+        for (int i = 0; i < sorted.Length; i++)
         {
-            for (int n = 0; n < players.Length; n++)
-            {
-                if (i == n) break;
-
-                if (players[i].score > players[n].score)
-                {
-                    players[i].rank++;
-                }             
-            }
+            Debug.Log(sorted[i].score);
         }
     }
 }
