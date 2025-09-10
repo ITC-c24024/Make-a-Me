@@ -11,6 +11,8 @@ public class ScoreScript : MonoBehaviour
     PlayerController playerController;
     [SerializeField]
     ScoreManager scoreManager;
+    [SerializeField]
+    LeftConveyorScript leftConveyorScript;
 
     [SerializeField, Header("クローンオブジェクト")]
     GameObject[] clones;
@@ -87,6 +89,7 @@ public class ScoreScript : MonoBehaviour
             SetUI();
 
             StartCoroutine(MoveClone());
+
         }
 
         if (playerController.haveBattery)
@@ -159,6 +162,7 @@ public class ScoreScript : MonoBehaviour
         clones[2].SetActive(false);
 
         StartCoroutine(MoveMaterial());
+        leftConveyorScript.AddList(playerController.playerNum);
     }    
 
     void SetUI()
