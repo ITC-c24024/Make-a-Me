@@ -8,10 +8,10 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("プレイヤー番号")]
     int playerNum;
 
-    //レベル
+    // レベル
     public int level = 1;
 
-    //最大レベル
+    // 最大レベル
     int maxLevel = 5;
 
     [SerializeField, Header("総取得エネルギー")]
@@ -26,10 +26,10 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("チャージ中")]
     bool isCharge;
 
-    //チャージ用タイマー
+    // チャージ用タイマー
     float timer = 0;
 
-    //ドロップマネージャースクリプト
+    // ドロップマネージャースクリプト
     DropEnergyManagerScript dropManagerSC;
 
     [SerializeField, Header("エネルギー量表示用UI")]
@@ -56,17 +56,18 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("スライダー表示時間(秒)")]
     float sliderDisplayTime = 3f;
 
-    //スライダー表示コルーチン用
+    // スライダー表示コルーチン用
     Coroutine showRoutine;
 
-    //UIの座標
+    // UIの座標
     Transform uiPos;
 
-    //カメラ
+    // カメラ
     Camera mainCam;
 
     [SerializeField, Header("ハンマーオブジェクト")]
     GameObject[] hammerObj;
+
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
@@ -78,17 +79,17 @@ public class EnergyScript : MonoBehaviour
 
         mainCam = Camera.main;
     }
+
     void Update()
     {
         if (isCharge)
         {
-            //１秒ごとに５ずつチャージされる
+            // 1秒ごとに5ずつチャージされる
             timer += Time.deltaTime * 50;
-
-            if (timer >= 1)
+            if (timer >= 1f)
             {
                 ChargeEnergy(1);
-                timer = 0;
+                timer = 0f;
             }
         }
 
@@ -97,32 +98,31 @@ public class EnergyScript : MonoBehaviour
             // プレイヤーの頭上に追従
             Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 1f, 2));
             uiPos.position = screenPos;
-
         }
     }
 
     /// <summary>
     /// エネルギーのチャージ
     /// </summary>
-    /// <param name="amount">取得量</param>
     public void ChargeEnergy(int amount)
     {
-        if (level < maxLevel)
+
+        if(allEnergyAmount < 700)
         {
             allEnergyAmount += amount;
+        }
 
-            while (amount + energyAmount >= requireEnergy)
-            {
-                amount -= requireEnergy - energyAmount;
-                LevelUp();
-            }
+        while (amount + energyAmount >= requireEnergy)
+        {
+            amount -= requireEnergy - energyAmount;
+            LevelUp();
+        }
 
-            if (amount > 0)
-            {
-                energyAmount += amount;
-                energySlider[0].value = energyAmount;
-                energySlider[1].value = energyAmount;
-            }
+        if (amount > 0)
+        {
+            energyAmount += amount;
+            energySlider[0].value = energyAmount;
+            energySlider[1].value = energyAmount;
         }
 
         ShowSlider();
@@ -163,13 +163,14 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LevelUp()
     {
-        hammerObj[level - 1].SetActive(false);
-        hammerObj[level].SetActive(true);
-        hammerImage.sprite = hammerSprite[level];
-
         level++;
+        level = Mathf.Clamp(level, 1, maxLevel);
 
-        if (level < 5)
+        hammerObj[level - 2].SetActive(false);
+        hammerObj[level - 1].SetActive(true);
+        hammerImage.sprite = hammerSprite[level - 1];
+
+        if (level < maxLevel)
         {
             requireEnergy += 50;
             energyAmount = 0;
@@ -178,8 +179,6 @@ public class EnergyScript : MonoBehaviour
             energySlider[1].maxValue += 50;
             energySlider[0].value = 0;
             energySlider[1].value = 0;
-
-
         }
 
         levelImage[0].sprite = levelSprite1[level - 1];
@@ -191,11 +190,12 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LevelDown()
     {
-        hammerObj[level - 1].SetActive(false);
-        hammerObj[level - 2].SetActive(true);
-        hammerImage.sprite = hammerSprite[level - 1];
-
         level--;
+        level = Mathf.Clamp(level, 1, maxLevel);
+
+        hammerObj[level].SetActive(false);
+        hammerObj[level - 1].SetActive(true);
+        hammerImage.sprite = hammerSprite[level - 1];
 
         if (level > 1)
         {
@@ -215,7 +215,6 @@ public class EnergyScript : MonoBehaviour
     /// <summary>
     /// エネルギーチャージ中かどうかの切り替え用
     /// </summary>
-    /// <param name="charge">ON/OFF指定</param>
     public void ChargeSwitch(bool charge)
     {
         isCharge = charge;
@@ -226,6 +225,7 @@ public class EnergyScript : MonoBehaviour
         if (showRoutine != null)
         {
             StopCoroutine(showRoutine);
+            showRoutine = null;
         }
 
         showRoutine = StartCoroutine(ShowSliderRoutine());
@@ -241,3 +241,4 @@ public class EnergyScript : MonoBehaviour
         showRoutine = null;
     }
 }
+
