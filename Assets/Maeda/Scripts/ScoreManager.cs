@@ -19,7 +19,6 @@ public class ScoreManager : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             players[i] = new Player();
-            players[i].rank = 4;
         }
     }
 
@@ -39,11 +38,27 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     void Ranking()
     {
-        var sorted = players.OrderBy(score => score).ToArray();
+        // ƒXƒRƒA‚Ì‚‚¢‡‚É•À‚×‘Ö‚¦
+        var sorted = players
+            .Select((p, index) => new { Player = p, index = index })
+            .OrderByDescending(x => x.Player.score)
+            .ToArray();
         
         for (int i = 0; i < sorted.Length; i++)
         {
-            Debug.Log(sorted[i].score);
+            int currentRank = 1;
+            //“¯—¦ˆ—
+            if (i > 0 && sorted[i].Player.score < sorted[i - 1].Player.score)
+            {
+                currentRank = i + 1;
+            }
+            int originIndex = sorted[i].index;
+            players[originIndex].rank = currentRank;
+        }
+
+        for(int i = 0; i < players.Length; i++)
+        {
+            Debug.Log($"Player{i + 1}: Score={players[i].score}, Rank={players[i].rank}");
         }
     }
 }
