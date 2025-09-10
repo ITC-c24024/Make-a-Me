@@ -14,18 +14,18 @@ public class ScrollObjScript : MonoBehaviour
     {
         transform.position = startPos;
 
-        var posDistance = Vector3.Distance(startPos, targetPos);
-        float t = 0f;
-
-        while (t < 1f)
+        while (transform.position != targetPos)
         {
-            t += (Time.deltaTime * speed) / posDistance;
-            transform.position = Vector3.Lerp(startPos, targetPos, t);
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                targetPos,
+                speed * Time.deltaTime
+            );
             yield return null;
         }
 
-        transform.position = targetPos;
-        conveyorSC.AddClone(this,playerNum);
+        conveyorSC.AddClone(this, playerNum);
     }
+
 
 }
