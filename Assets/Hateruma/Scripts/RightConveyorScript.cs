@@ -2,23 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RightConveyorScript : MonoBehaviour
+public class RightConveyorScript : SideConveyorScript
 {
-    [SerializeField, Header("開始位置")]
-    Vector3 startPos;
-
-    [SerializeField, Header("終了位置")]
-    Vector3 finishPos;
-
-    [SerializeField, Header("クローンオブジェクト")]
-    List<ScrollObjScript> cloneSC;
-
     List<ScrollObjScript> unUsedCloneSC = new List<ScrollObjScript>(12);
 
-    List<ScrollObjScript> usedCloneSC = new List<ScrollObjScript>(12);
-
-    [SerializeField, Header("スクロール速度")]
-    float scrollSpeed;
+    List<ScrollObjScript> usedCloneSC = new List<ScrollObjScript>();
 
     bool isScroll;
 
@@ -31,7 +19,7 @@ public class RightConveyorScript : MonoBehaviour
 
         foreach (var sc in unUsedCloneSC)
         {
-            sc.rightConveyorSC = this;
+            sc.conveyorSC = this;
         }
 
         isScroll = true;
@@ -53,7 +41,7 @@ public class RightConveyorScript : MonoBehaviour
         }
     }
 
-    public void AddClone(ScrollObjScript scrollObj)
+    public override void AddClone(ScrollObjScript scrollObj,int playerNum)
     {
         unUsedCloneSC.Add(scrollObj);
         usedCloneSC.Remove(scrollObj);

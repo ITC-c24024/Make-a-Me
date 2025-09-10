@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class ScrollObjScript : MonoBehaviour
 {
-    public RightConveyorScript rightConveyorSC;
+    public SideConveyorScript conveyorSC;
+
+    [SerializeField, Header("PlayerÇÃÉiÉìÉoÅ[")]
+    public int playerNum = 0;
+
     public IEnumerator Move(Vector3 startPos, Vector3 targetPos, float speed)
     {
         transform.position = startPos;
@@ -21,7 +25,7 @@ public class ScrollObjScript : MonoBehaviour
         }
 
         transform.position = targetPos;
-        rightConveyorSC.AddClone(this);
+        conveyorSC.AddClone(this,playerNum);
     }
 
 }
