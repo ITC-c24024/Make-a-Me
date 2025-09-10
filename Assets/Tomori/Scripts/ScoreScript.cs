@@ -25,6 +25,8 @@ public class ScoreScript : MonoBehaviour
     Image[] scoreImage;
     [SerializeField, Header("数字UI")]
     Sprite[] numSprite;
+    [SerializeField, Header("進捗スライダー")]
+    Slider slider;
 
     public float maxTime = 10f;
     [SerializeField] float workTime = 0f;
@@ -55,6 +57,9 @@ public class ScoreScript : MonoBehaviour
         if (isWork)
         {
             workTime += Time.deltaTime * efficiency[energyScript.level - 1];
+
+            slider.gameObject.SetActive(true);
+            slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
         if (isArea)
         {
@@ -73,6 +78,7 @@ public class ScoreScript : MonoBehaviour
             clones[2].SetActive(true);
 
             isWork = false;
+            slider.gameObject.SetActive(false);
             playerController.JobAnim(isWork);
 
             workTime = 0;

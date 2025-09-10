@@ -26,6 +26,10 @@ public class PlayerController : ActionScript
     float stanTime = 2.0f;
     //スタン判定
     public bool isStun = false;
+    [SerializeField, Header("無敵時間")]
+    float invincibleTime = 2.0f;
+    //無敵判定
+    bool invincible = false;
 
     Rigidbody playerRB;
 
@@ -132,17 +136,24 @@ public class PlayerController : ActionScript
         energyScript.LostEnergy();
 
         animator.SetBool("Isstun", true);
+        invincible = true;
         isStun = true;
         ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
 
         isStun = false;
         animator.SetBool("Isstun", false);
+        transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
+
+        Invoke("ResetInvincible", invincibleTime);
     }
 
-    void ThrowAnim()
+    /// <summary>
+    /// 無敵状態リセット
+    /// </summary>
+    void ResetInvincible()
     {
-        animator.SetBool("IsThrow", false);
+        invincible = false;
     }
 
     public void JobAnim(bool isWalk)
