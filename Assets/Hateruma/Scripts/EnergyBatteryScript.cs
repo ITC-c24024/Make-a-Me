@@ -40,7 +40,7 @@ public class EnergyBatteryScript : MonoBehaviour
         if (ownerObj != null)
         {
             transform.position = ownerObj.transform.position + new Vector3(0,0);
-            transform.rotation = ownerObj.transform.rotation * Quaternion.Euler(0, 90, 0);
+            transform.rotation = ownerObj.transform.rotation * Quaternion.Euler(0, 90, 90);
         }
     }
 

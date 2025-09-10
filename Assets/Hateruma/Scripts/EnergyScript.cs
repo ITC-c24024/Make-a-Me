@@ -89,7 +89,7 @@ public class EnergyScript : MonoBehaviour
         if (uiPos != null)
         {
             // ÉvÉåÉCÉÑÅ[ÇÃì™è„Ç…í«è]
-            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
+            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2f, 1));
             uiPos.position = screenPos;
 
         }
