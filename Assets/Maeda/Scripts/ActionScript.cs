@@ -9,6 +9,8 @@ public class ActionScript : MonoBehaviour
 {
     //ロボットオブジェクト
     public GameObject robot;
+    //バッテリー追従オブジェクト
+    public GameObject handObj;
 
     //入力制限
     public bool isTimer = false;
