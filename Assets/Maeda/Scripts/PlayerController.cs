@@ -27,11 +27,14 @@ public class PlayerController : ActionScript
     //スタン判定
     public bool isStun = false;
 
+    Rigidbody playerRB;
+
     Animator animator;
 
     void Start()
     {
         energyScript = GetComponent<EnergyScript>();
+        playerRB = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
     
@@ -72,7 +75,9 @@ public class PlayerController : ActionScript
             StartCoroutine(catchRangeSC.PickupDelay());
             
             batteryScript.Throw();
-            animator.SetTrigger("IsThrow");
+            animator.SetBool("IsThrow", true);
+            animator.SetBool("IsThrow", false);
+            //Invoke("ThrowAnim", 0.1f);
         }
     }
 
@@ -83,10 +88,10 @@ public class PlayerController : ActionScript
             StartCoroutine(Stan());
         }
         if (other.CompareTag($"WorkArea{playerNum}") && !isStun)
-        {
-            ChangeHaveBattery(false);
+        {          
             if (batteryScript != null)
             {
+                ChangeHaveBattery(false);
                 batteryScript.Drop();
             }
         }
@@ -126,15 +131,23 @@ public class PlayerController : ActionScript
         //エネルギードロップ
         energyScript.LostEnergy();
 
+        playerRB.isKinematic = true;
         animator.SetBool("Isstun", true);
         isStun = true;
-        ChangeHaveBattery(false);
+        //ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
+
+        playerRB.isKinematic = false;
         isStun = false;
         animator.SetBool("Isstun", false);
     }
 
-    public void Job(bool isWalk)
+    void ThrowAnim()
+    {
+        animator.SetBool("IsThrow", false);
+    }
+
+    public void JobAnim(bool isWalk)
     {
         animator.SetBool("IsJob", isWalk);
     }

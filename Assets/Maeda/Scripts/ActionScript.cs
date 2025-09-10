@@ -30,10 +30,14 @@ public class ActionScript : MonoBehaviour
         throwAction = actionMap["Throw"];
     }
 
+    /// <summary>
+    /// 入力クールタイム
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator PickupDelay()
     {
         isTimer = true;
-        yield return null; 
+        yield return new WaitForSeconds(0.2f); 
         isTimer = false;
     }
 }

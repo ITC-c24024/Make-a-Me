@@ -30,7 +30,7 @@ public class CatchRange : ActionScript
         Debug.Log("Catch");
         if (batteryScript != null)
         {
-            batteryScript.ChangeOwner(playerController.playerNum, robot);
+            batteryScript.ChangeOwner(playerController.playerNum, handObj);
             canTake = false;
             playerController.ChangeBatterySC(batteryScript);
         }
