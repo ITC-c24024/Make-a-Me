@@ -38,6 +38,12 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("エネルギー量表示用スライダー")]
     Slider[] energySlider;
 
+    [SerializeField, Header("ハンマーイメージ")]
+    Image hammerImage;
+
+    [SerializeField, Header("ハンマーのスプライト")]
+    Sprite[] hammerSprite;
+
     [SerializeField, Header("レベルのImage")]
     Image[] levelImage;
 
@@ -89,7 +95,7 @@ public class EnergyScript : MonoBehaviour
         if (uiPos != null)
         {
             // プレイヤーの頭上に追従
-            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2f, 1));
+            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 1f, 2));
             uiPos.position = screenPos;
 
         }
@@ -159,6 +165,7 @@ public class EnergyScript : MonoBehaviour
     {
         hammerObj[level - 1].SetActive(false);
         hammerObj[level].SetActive(true);
+        hammerImage.sprite = hammerSprite[level];
 
         level++;
 
@@ -171,6 +178,8 @@ public class EnergyScript : MonoBehaviour
             energySlider[1].maxValue += 50;
             energySlider[0].value = 0;
             energySlider[1].value = 0;
+
+
         }
 
         levelImage[0].sprite = levelSprite1[level - 1];
@@ -184,6 +193,7 @@ public class EnergyScript : MonoBehaviour
     {
         hammerObj[level - 1].SetActive(false);
         hammerObj[level - 2].SetActive(true);
+        hammerImage.sprite = hammerSprite[level - 1];
 
         level--;
 
