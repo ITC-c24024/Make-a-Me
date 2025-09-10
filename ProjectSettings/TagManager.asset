@@ -13,6 +13,10 @@ TagManager:
   - Player2
   - Player3
   - Player4
+  - WorkArea1
+  - WorkArea2
+  - WorkArea3
+  - WorkArea4
   layers:
   - Default
   - TransparentFX

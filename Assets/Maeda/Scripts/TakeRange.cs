@@ -54,7 +54,7 @@ public class TakeRange : ActionScript
             }
             //バッテリー所持者を自分にする
             canTake = false;
-            batteryScript.ChangeOwner(playerController.playerNum, robot);
+            batteryScript.ChangeOwner(playerController.playerNum, handObj);
             playerController.ChangeBatterySC(batteryScript);
         }   
     }

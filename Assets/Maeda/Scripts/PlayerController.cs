@@ -82,6 +82,14 @@ public class PlayerController : ActionScript
         {
             StartCoroutine(Stan());
         }
+        if (other.CompareTag($"WorkArea{playerNum}") && !isStun)
+        {
+            ChangeHaveBattery(false);
+            if (batteryScript != null)
+            {
+                batteryScript.Drop();
+            }
+        }
     }
 
     /// <summary>
