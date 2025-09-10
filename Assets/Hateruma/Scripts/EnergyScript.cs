@@ -77,7 +77,7 @@ public class EnergyScript : MonoBehaviour
         if (isCharge)
         {
             //ÇPïbÇ≤Ç∆Ç…ÇTÇ∏Ç¬É`ÉÉÅ[ÉWÇ≥ÇÍÇÈ
-            timer += Time.deltaTime * 5;
+            timer += Time.deltaTime * 50;
 
             if (timer >= 1)
             {
@@ -89,7 +89,7 @@ public class EnergyScript : MonoBehaviour
         if (uiPos != null)
         {
             // ÉvÉåÉCÉÑÅ[ÇÃì™è„Ç…í«è]
-            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
+            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2f, 1));
             uiPos.position = screenPos;
 
         }
@@ -161,13 +161,17 @@ public class EnergyScript : MonoBehaviour
         hammerObj[level].SetActive(true);
 
         level++;
-        requireEnergy += 50;
-        energyAmount = 0;
 
-        energySlider[0].maxValue += 50;
-        energySlider[1].maxValue += 50;
-        energySlider[0].value = 0;
-        energySlider[1].value = 0;
+        if (level < 5)
+        {
+            requireEnergy += 50;
+            energyAmount = 0;
+
+            energySlider[0].maxValue += 50;
+            energySlider[1].maxValue += 50;
+            energySlider[0].value = 0;
+            energySlider[1].value = 0;
+        }
 
         levelImage[0].sprite = levelSprite1[level - 1];
         levelImage[1].sprite = levelSprite2[level - 1];
@@ -182,13 +186,17 @@ public class EnergyScript : MonoBehaviour
         hammerObj[level - 2].SetActive(true);
 
         level--;
-        requireEnergy -= 50;
-        energyAmount = requireEnergy;
 
-        energySlider[0].maxValue -= 50;
-        energySlider[1].maxValue -= 50;
-        energySlider[0].value = requireEnergy;
-        energySlider[1].value = requireEnergy;
+        if (level > 1)
+        {
+            requireEnergy -= 50;
+            energyAmount = requireEnergy;
+
+            energySlider[0].maxValue -= 50;
+            energySlider[1].maxValue -= 50;
+            energySlider[0].value = requireEnergy;
+            energySlider[1].value = requireEnergy;
+        }
 
         levelImage[0].sprite = levelSprite1[level - 1];
         levelImage[1].sprite = levelSprite2[level - 1];
