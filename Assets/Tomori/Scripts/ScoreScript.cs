@@ -182,13 +182,14 @@ public class ScoreScript : MonoBehaviour
         {
             isArea = false;
             isWork = false;
+            playerController.Job(isWork);
             hammer.transform.position = new Vector3(
                 player.transform.position.x, 
                 player.transform.position.y, 
                 -0.035f
                 ) ;
             hammer.transform.rotation = Quaternion.Euler(0, 0, 45);
-            playerController.Job(isWork);
+            
         }
     }
 }
