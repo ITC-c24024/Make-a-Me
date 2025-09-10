@@ -28,7 +28,7 @@ public class TimerScript : MonoBehaviour
         {
             currentTime += Time.deltaTime;
 
-            gearOut.rectTransform.localEulerAngles += new Vector3(0, 0, 1);
+            gearOut.rectTransform.localEulerAngles += new Vector3(0, 0, -1);
             gearIn.rectTransform.localEulerAngles += new Vector3(0, 0, 4);
 
             //êjÇâÒì]
