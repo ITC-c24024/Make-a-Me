@@ -49,9 +49,12 @@ public class ScoreScript : MonoBehaviour
     [SerializeField, Header("ÉNÉçÅ[ÉìÇÃí‚é~Zç¿ïW")]
     float stopPos;
 
+    Animator animator;
+
     void Start()
     {
         StartCoroutine(MoveMaterial());
+        animator = clones[2].GetComponent<Animator>();
     }
 
     void Update()
@@ -78,6 +81,7 @@ public class ScoreScript : MonoBehaviour
         {
             clones[1].SetActive(false);
             clones[2].SetActive(true);
+            animator.SetBool("IsYell", true);
 
             isWork = false;
             slider.gameObject.SetActive(false);
