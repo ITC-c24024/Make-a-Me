@@ -36,7 +36,16 @@ public class EnergyScript : MonoBehaviour
     GameObject energyUIObj;
 
     [SerializeField, Header("エネルギー量表示用スライダー")]
-    Slider energySlider;
+    Slider[] energySlider;
+
+    [SerializeField, Header("レベルのImage")]
+    Image[] levelImage;
+
+    [SerializeField, Header("レベルのSprite(非常時)")]
+    Sprite[] levelSprite1;
+
+    [SerializeField, Header("レベルのSprite(常時)")]
+    Sprite[] levelSprite2;
 
     [SerializeField, Header("スライダー表示時間(秒)")]
     float sliderDisplayTime = 3f;
@@ -56,7 +65,8 @@ public class EnergyScript : MonoBehaviour
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
 
-        energySlider.maxValue = requireEnergy;
+        energySlider[0].maxValue = requireEnergy;
+        energySlider[1].maxValue = requireEnergy;
 
         uiPos = energyUIObj.transform;
 
@@ -104,7 +114,8 @@ public class EnergyScript : MonoBehaviour
             if (amount > 0)
             {
                 energyAmount += amount;
-                energySlider.value = energyAmount;
+                energySlider[0].value = energyAmount;
+                energySlider[1].value = energyAmount;
             }
         }
 
@@ -133,7 +144,8 @@ public class EnergyScript : MonoBehaviour
             if (amount > 0)
             {
                 energyAmount -= amount;
-                energySlider.value = energyAmount;
+                energySlider[0].value = energyAmount;
+                energySlider[1].value = energyAmount;
             }
         }
 
@@ -152,8 +164,13 @@ public class EnergyScript : MonoBehaviour
         requireEnergy += 50;
         energyAmount = 0;
 
-        energySlider.maxValue += 50;
-        energySlider.value = 0;
+        energySlider[0].maxValue += 50;
+        energySlider[1].maxValue += 50;
+        energySlider[0].value = 0;
+        energySlider[1].value = 0;
+
+        levelImage[0].sprite = levelSprite1[level - 1];
+        levelImage[1].sprite = levelSprite2[level - 1];
     }
 
     /// <summary>
@@ -168,8 +185,13 @@ public class EnergyScript : MonoBehaviour
         requireEnergy -= 50;
         energyAmount = requireEnergy;
 
-        energySlider.maxValue -= 50;
-        energySlider.value = requireEnergy;
+        energySlider[0].maxValue -= 50;
+        energySlider[1].maxValue -= 50;
+        energySlider[0].value = requireEnergy;
+        energySlider[1].value = requireEnergy;
+
+        levelImage[0].sprite = levelSprite1[level - 1];
+        levelImage[1].sprite = levelSprite2[level - 1];
     }
 
     /// <summary>
