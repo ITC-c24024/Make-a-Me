@@ -64,7 +64,8 @@ public class PlayerController : ActionScript
                 //プレイヤーを回転
                 transform.rotation = Quaternion.Euler(0, angle, 0);
             }
-        }      
+        }
+        else animator.SetBool("Iswalk", false);
 
         //ボタンを押した判定
         var throwAct = throwAction.triggered;
@@ -77,7 +78,6 @@ public class PlayerController : ActionScript
             batteryScript.Throw();
             animator.SetBool("IsThrow", true);
             animator.SetBool("IsThrow", false);
-            //Invoke("ThrowAnim", 0.1f);
         }
     }
 
@@ -131,13 +131,11 @@ public class PlayerController : ActionScript
         //エネルギードロップ
         energyScript.LostEnergy();
 
-        playerRB.isKinematic = true;
         animator.SetBool("Isstun", true);
         isStun = true;
-        //ChangeHaveBattery(false);
+        ChangeHaveBattery(false);
         yield return new WaitForSeconds(stanTime);
 
-        playerRB.isKinematic = false;
         isStun = false;
         animator.SetBool("Isstun", false);
     }
