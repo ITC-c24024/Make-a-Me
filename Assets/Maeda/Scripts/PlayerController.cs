@@ -64,12 +64,13 @@ public class PlayerController : ActionScript
                 animator.SetBool("Iswalk", false);
             }
 
-            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) && !scoreScript.isWork)
+            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) && !scoreScript.isArea)
             {
                 //スティックの角度を計算
-                float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
-                //プレイヤーを回転
-                transform.rotation = Quaternion.Euler(0, angle, 0);
+                //float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
+                //プレイヤーを徐々に回転
+                Quaternion to = Quaternion.LookRotation(new Vector3(move.x, 0, move.y));
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, 720 * Time.deltaTime);
             }
         }
         else animator.SetBool("Iswalk", false);
@@ -151,7 +152,11 @@ public class PlayerController : ActionScript
         if (scoreScript.isWork) JobAnim(true);   
         animator.SetBool("Isstun", false);
         
-        transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
+        transform.localRotation = Quaternion.Euler(
+            0, 
+            transform.localEulerAngles.y, 
+            transform.localEulerAngles.z
+            );
 
         Invoke("ResetInvincible", invincibleTime);
     }

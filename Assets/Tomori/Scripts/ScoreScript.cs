@@ -38,7 +38,7 @@ public class ScoreScript : MonoBehaviour
 
     [SerializeField] int score = 0;
     public bool isWork = false;
-    bool isArea = false;
+    public bool isArea = false;
     bool isMove = false;
 
     [SerializeField] int workAreaNum = 0;
