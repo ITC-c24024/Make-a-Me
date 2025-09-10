@@ -7,7 +7,6 @@ public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
     EnergyScript energyScript;
-    [SerializeField]
     PlayerController playerController;
     [SerializeField]
     ScoreManager scoreManager;
@@ -38,7 +37,7 @@ public class ScoreScript : MonoBehaviour
     private float[] efficiency = new float[] { 1.0f, 1.5f, 2.5f, 4.0f, 6.0f };
 
     [SerializeField] int score = 0;
-    [SerializeField] bool isWork = false;
+    public bool isWork = false;
     bool isArea = false;
     bool isMove = false;
 
@@ -53,21 +52,24 @@ public class ScoreScript : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(MoveMaterial());
+        playerController = player.GetComponent<PlayerController>();
         animator = clones[2].GetComponent<Animator>();
+
+        StartCoroutine(MoveMaterial());        
     }
 
     void Update()
     {
-        if (isWork)
+        if (isWork && !playerController.isStun)
         {
             workTime += Time.deltaTime * efficiency[energyScript.level - 1];
 
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
-        if (isArea)
+        if (isArea && !playerController.isStun)
         {
+            player.transform.LookAt(new Vector3(clones[0].transform.position.x, 0, stopPos));
             hammer.transform.position = follow.transform.position;
             hammer.transform.rotation = follow.transform.rotation;
         }

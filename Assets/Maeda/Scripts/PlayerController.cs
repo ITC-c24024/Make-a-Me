@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PlayerController : ActionScript
 {
+    [SerializeField]
+    ScoreScript scoreScript;
     [SerializeField]
     TakeRange takeRangeSC;
     [SerializeField]
@@ -61,7 +64,7 @@ public class PlayerController : ActionScript
                 animator.SetBool("Iswalk", false);
             }
 
-            if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) && !scoreScript.isWork)
             {
                 //スティックの角度を計算
                 float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
@@ -135,14 +138,19 @@ public class PlayerController : ActionScript
         //エネルギードロップ
         energyScript.LostEnergy();
 
-        animator.SetBool("Isstun", true);
         invincible = true;
+        if (scoreScript.isWork) JobAnim(false);
         isStun = true;
+        animator.SetBool("Isstun", true);
+        
         ChangeHaveBattery(false);
+
         yield return new WaitForSeconds(stanTime);
 
         isStun = false;
+        if (scoreScript.isWork) JobAnim(true);   
         animator.SetBool("Isstun", false);
+        
         transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
 
         Invoke("ResetInvincible", invincibleTime);

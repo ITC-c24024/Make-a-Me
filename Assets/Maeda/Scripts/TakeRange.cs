@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class TakeRange : ActionScript
 {
+    [SerializeField]
+    ScoreScript scoreScript;
     EnergyBatteryScript batteryScript;
     PlayerController playerController;
     public PlayerController[] playerControllers = new PlayerController[4];    
@@ -43,7 +45,6 @@ public class TakeRange : ActionScript
     {
         if (batteryScript != null)
         {
-            Debug.Log("take");
             var ownerNum = batteryScript.OwnerCheck();
             
             //バッテリーの所持者がいるとき
@@ -61,7 +62,7 @@ public class TakeRange : ActionScript
 
     private void OnTriggerStay(Collider other)
     {
-        if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
+        if (!playerController.haveBattery && other.gameObject.CompareTag("Battery") && !scoreScript.isWork)
         {
             var energyBatterySC = other.gameObject.GetComponent<EnergyBatteryScript>();
             if (!energyBatterySC.bombSwitch)
