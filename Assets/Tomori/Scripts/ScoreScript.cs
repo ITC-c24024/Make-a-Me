@@ -205,12 +205,8 @@ public class ScoreScript : MonoBehaviour
             isWork = false;
             playerController.JobAnim(isWork);
 
-            hammer.transform.position = new Vector3(
-                player.transform.position.x, 
-                player.transform.position.y, 
-                -0.035f
-                ) ;
-            hammer.transform.rotation = Quaternion.Euler(0, 0, 90);          
+            hammer.transform.localPosition = new Vector3(0, 0, 0);
+            hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);          
         }
     }
 }
