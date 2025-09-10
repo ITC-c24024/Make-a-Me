@@ -35,11 +35,11 @@ public class EnergyBatteryScript : MonoBehaviour
         batteryRB = gameObject.GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (ownerObj != null)
         {
-            transform.position = ownerObj.transform.position + new Vector3(0, 1.2f, 0);
+            transform.position = ownerObj.transform.position + new Vector3(0,0);
             transform.rotation = ownerObj.transform.rotation * Quaternion.Euler(0, 90, 0);
         }
     }
