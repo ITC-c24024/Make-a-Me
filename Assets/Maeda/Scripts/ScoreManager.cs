@@ -55,10 +55,10 @@ public class ScoreManager : MonoBehaviour
             int originIndex = sorted[i].index;
             players[originIndex].rank = currentRank;
         }
-
+        /*
         for(int i = 0; i < players.Length; i++)
         {
             Debug.Log($"Player{i + 1}: Score={players[i].score}, Rank={players[i].rank}");
-        }
+        }*/
     }
 }
