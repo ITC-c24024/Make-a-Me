@@ -89,6 +89,18 @@ public class EnergyBatteryScript : MonoBehaviour
         bombSwitch = true;
     }
 
+    /// <summary>
+    /// 作業場に入った時のバッテリードロップ処理
+    /// </summary>
+    public void Drop()
+    {
+        ownerObj = null;
+        batteryRB.isKinematic = false;
+
+        batteryRB.velocity = Vector3.zero;
+        batteryRB.angularVelocity = Vector3.zero;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {

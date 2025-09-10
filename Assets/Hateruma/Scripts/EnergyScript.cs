@@ -79,11 +79,9 @@ public class EnergyScript : MonoBehaviour
         if (uiPos != null)
         {
             // プレイヤーの頭上に追従
-            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 2.5f, 0));
+            Vector3 screenPos = mainCam.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
             uiPos.position = screenPos;
 
-            // カメラの方向を向く（ビルボード）
-            uiPos.forward = mainCam.transform.forward;
         }
     }
 
@@ -195,11 +193,11 @@ public class EnergyScript : MonoBehaviour
 
     IEnumerator ShowSliderRoutine()
     {
-        energySlider.gameObject.SetActive(true);
+        energyUIObj.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(sliderDisplayTime);
 
-        energySlider.gameObject.SetActive(false);
+        energyUIObj.gameObject.SetActive(false);
         showRoutine = null;
     }
 }
