@@ -188,7 +188,7 @@ public class ScoreScript : MonoBehaviour
                 player.transform.position.y, 
                 -0.035f
                 ) ;
-            hammer.transform.rotation = Quaternion.Euler(0, 0, 45);
+            hammer.transform.rotation = Quaternion.Euler(0, 0, 90);
             
         }
     }
