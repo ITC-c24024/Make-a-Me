@@ -57,7 +57,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.748892
+      - time: 0.7748776
         functionName: HitHammer
         data: 
         objectReferenceParameter: {fileID: 8520885570543549995, guid: 0c666ab148272d54a8c155731673e42a, type: 3}

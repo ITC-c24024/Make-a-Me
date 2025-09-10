@@ -36,6 +36,7 @@ public class ScoreScript : MonoBehaviour
     [SerializeField] int score = 0;
     [SerializeField] bool isWork = false;
     bool isArea = false;
+    bool isMove = false;
 
     [SerializeField] int workAreaNum = 0;
 
@@ -53,7 +54,7 @@ public class ScoreScript : MonoBehaviour
     {
         if (isWork)
         {
-            workTime += Time.deltaTime * efficiency[energyScript.level-1];          
+            workTime += Time.deltaTime * efficiency[energyScript.level - 1];
         }
         if (isArea)
         {
@@ -72,7 +73,7 @@ public class ScoreScript : MonoBehaviour
             clones[2].SetActive(true);
 
             isWork = false;
-            playerController.Job(isWork);
+            playerController.JobAnim(isWork);
 
             workTime = 0;
             score += 1;
@@ -80,6 +81,11 @@ public class ScoreScript : MonoBehaviour
             SetUI();
 
             StartCoroutine(MoveClone());
+        }
+
+        if (playerController.haveBattery)
+        {
+            isWork = false;
         }
     }
 
@@ -89,6 +95,8 @@ public class ScoreScript : MonoBehaviour
     /// <returns></returns>
     IEnumerator MoveMaterial()
     {
+        isMove = true;
+
         clones[0].SetActive(true);
         
         float time = 0;
@@ -108,10 +116,12 @@ public class ScoreScript : MonoBehaviour
 
             yield return null;
         }
+        isMove = false;
+
         if (isArea)
         {
             isWork = true;
-            playerController.Job(isWork);
+            playerController.JobAnim(isWork);
         }
     }
     /// <summary>
@@ -119,7 +129,8 @@ public class ScoreScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     IEnumerator MoveClone()
-    {       
+    {
+        isMove = true;
         yield return new WaitForSeconds(1.0f);
 
         float time = 0;
@@ -171,8 +182,8 @@ public class ScoreScript : MonoBehaviour
         if(other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isArea = true;
-            isWork = true;
-            playerController.Job(isWork);
+            if (!isMove) isWork = true;
+            playerController.JobAnim(isWork);
         }
     }
 
@@ -182,14 +193,14 @@ public class ScoreScript : MonoBehaviour
         {
             isArea = false;
             isWork = false;
-            playerController.Job(isWork);
+            playerController.JobAnim(isWork);
+
             hammer.transform.position = new Vector3(
                 player.transform.position.x, 
                 player.transform.position.y, 
                 -0.035f
                 ) ;
-            hammer.transform.rotation = Quaternion.Euler(0, 0, 45);
-            
+            hammer.transform.rotation = Quaternion.Euler(0, 0, 90);          
         }
     }
 }
