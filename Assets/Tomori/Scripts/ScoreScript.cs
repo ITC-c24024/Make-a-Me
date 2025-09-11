@@ -121,6 +121,11 @@ public class ScoreScript : MonoBehaviour
         }
     }
 
+    public void ChangeIsWork(bool set)
+    {
+        isWork = set;
+    }
+
     /// <summary>
     /// ƒNƒ[ƒ“Ş—¿‚ÌˆÚ“®
     /// </summary>

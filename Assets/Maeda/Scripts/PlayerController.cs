@@ -140,7 +140,11 @@ public class PlayerController : ActionScript
         energyScript.LostEnergy();
 
         invincible = true;
-        if (scoreScript.isWork) JobAnim(false);
+        if (scoreScript.isWork)
+        {
+            scoreScript.ChangeIsWork(false);
+            JobAnim(false);
+        }
         isStun = true;
         animator.SetBool("Isstun", true);
         
@@ -149,7 +153,11 @@ public class PlayerController : ActionScript
         yield return new WaitForSeconds(stanTime);
 
         isStun = false;
-        if (scoreScript.isWork) JobAnim(true);   
+        if (scoreScript.isWork)
+        {
+            scoreScript.ChangeIsWork(true);
+            JobAnim(true);
+        }  
         animator.SetBool("Isstun", false);
         
         transform.localRotation = Quaternion.Euler(
