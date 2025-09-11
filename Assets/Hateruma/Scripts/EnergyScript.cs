@@ -85,7 +85,7 @@ public class EnergyScript : MonoBehaviour
         if (isCharge)
         {
             // 1•b‚²‚Æ‚É5‚¸‚Âƒ`ƒƒ[ƒW‚³‚ê‚é
-            timer += Time.deltaTime * 50;
+            timer += Time.deltaTime * 10;
             if (timer >= 1f)
             {
                 ChargeEnergy(1);

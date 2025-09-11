@@ -95,6 +95,8 @@ public class EnergyBatteryScript : MonoBehaviour
     public void Drop()
     {
         ownerObj = null;
+        ownerNum = 0;
+
         batteryRB.isKinematic = false;
 
         batteryRB.velocity = Vector3.zero;
@@ -147,6 +149,8 @@ public class EnergyBatteryScript : MonoBehaviour
             isDischarge = true;
         }
 
+        yield return null;
+
         batteryRB.isKinematic = true;
 
         ownerObj = null;
@@ -156,7 +160,6 @@ public class EnergyBatteryScript : MonoBehaviour
         bombSwitch = false;
         yield return new WaitForSeconds(1);
         dischargeObj.SetActive(false);
-        isDischarge = false;
 
         StartCoroutine(Respawn());//ÉäÉXÉ|Å[Éì
     }
@@ -179,5 +182,7 @@ public class EnergyBatteryScript : MonoBehaviour
 
         batteryRB.isKinematic = false;
         batteryRB.AddForce(selectObj.transform.forward * throwPower / 2,ForceMode.Impulse);
+
+        isDischarge = false;
     }
 }
