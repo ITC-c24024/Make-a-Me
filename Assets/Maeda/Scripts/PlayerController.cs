@@ -111,7 +111,7 @@ public class PlayerController : ActionScript
         {
             StartCoroutine(Stan());
         }
-        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible)
+        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible && haveBattery)
         {          
             if (batteryScript != null)
             {
@@ -142,7 +142,7 @@ public class PlayerController : ActionScript
     {
         haveBattery = have;
         animator.SetBool("IsHave", haveBattery);
-
+        if(!haveBattery) batteryScript = null;
         energyScript.ChargeSwitch(haveBattery);
     }
 
@@ -171,7 +171,7 @@ public class PlayerController : ActionScript
         isStun = false;
         if (scoreScript.isWork)
         {
-            scoreScript.ChangeIsWork(true);
+            scoreScript.ChangeIsWork(true); 
             JobAnim(true);
         }  
         animator.SetBool("Isstun", false);
