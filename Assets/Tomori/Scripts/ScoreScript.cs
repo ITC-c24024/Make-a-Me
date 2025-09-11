@@ -7,6 +7,7 @@ public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
     EnergyScript energyScript;
+    [SerializeField]
     PlayerController playerController;
     [SerializeField]
     ScoreManager scoreManager;
@@ -52,7 +53,6 @@ public class ScoreScript : MonoBehaviour
 
     void Start()
     {
-        playerController = player.GetComponent<PlayerController>();
         animator = clones[2].GetComponent<Animator>();
 
         StartCoroutine(MoveMaterial());        
@@ -60,6 +60,22 @@ public class ScoreScript : MonoBehaviour
 
     void Update()
     {
+        bool lookfoeward = Vector3.Angle(
+            player.transform.forward,
+             clones[0].transform.position - player.transform.position
+            ) <= 60;
+
+        if (lookfoeward && !isMove && isArea)
+        {
+            isWork = true;
+            playerController.JobAnim(true);
+        }
+        else
+        {
+            isWork = false;
+            playerController.JobAnim(false);
+        }
+
         if (isWork && !playerController.isStun)
         {
             workTime += Time.deltaTime * efficiency[energyScript.level - 1];
@@ -67,9 +83,11 @@ public class ScoreScript : MonoBehaviour
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
+       
         if (isArea && !playerController.isStun)
         {
-            player.transform.LookAt(new Vector3(clones[0].transform.position.x, 0, stopPos));
+            //Quaternion to = Quaternion.LookRotation(clones[0].transform.position);
+            //player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, to, 720 * Time.deltaTime);
             hammer.transform.position = follow.transform.position;
             hammer.transform.rotation = follow.transform.rotation;
         }

@@ -64,7 +64,7 @@ public class PlayerController : ActionScript
                 animator.SetBool("Iswalk", false);
             }
 
-            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) && !scoreScript.isArea)
+            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) /*&& !scoreScript.isArea*/)
             {
                 //スティックの角度を計算
                 //float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
