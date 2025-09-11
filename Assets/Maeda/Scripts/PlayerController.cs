@@ -100,6 +100,7 @@ public class PlayerController : ActionScript
             StartCoroutine(catchRangeSC.PickupDelay());
             
             batteryScript.Throw();
+            batteryScript = null;
             animator.SetBool("IsThrow", true);
             animator.SetBool("IsThrow", false);
         }
@@ -117,6 +118,7 @@ public class PlayerController : ActionScript
             {
                 ChangeHaveBattery(false);
                 batteryScript.Drop();
+                batteryScript = null;
             }
         }
     }
@@ -142,7 +144,7 @@ public class PlayerController : ActionScript
     {
         haveBattery = have;
         animator.SetBool("IsHave", haveBattery);
-        if(!haveBattery) batteryScript = null;
+        
         energyScript.ChargeSwitch(haveBattery);
     }
 
@@ -165,6 +167,7 @@ public class PlayerController : ActionScript
         animator.SetBool("Isstun", true);
         
         ChangeHaveBattery(false);
+        batteryScript = null;
 
         yield return new WaitForSeconds(stanTime);
 
