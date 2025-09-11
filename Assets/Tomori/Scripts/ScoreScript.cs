@@ -49,12 +49,11 @@ public class ScoreScript : MonoBehaviour
     [SerializeField, Header("クローンの停止Z座標")]
     float stopPos;
 
+    [SerializeField,Header("完成クローンのAnimator")]
     Animator animator;
 
     void Start()
     {
-        animator = clones[2].GetComponent<Animator>();
-
         StartCoroutine(MoveMaterial());        
     }
 

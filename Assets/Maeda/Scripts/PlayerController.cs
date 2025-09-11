@@ -171,6 +171,9 @@ public class PlayerController : ActionScript
 
     public void JobAnim(bool isWalk)
     {
-        animator.SetBool("IsJob", isWalk);
+        if (animator != null)
+        {
+            animator.SetBool("IsJob", isWalk);
+        }
     }
 }
