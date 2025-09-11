@@ -91,11 +91,11 @@ public class PlayerController : ActionScript
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Discharge") && !isStun)
+        if (other.CompareTag("Discharge") && !isStun && !invincible)
         {
             StartCoroutine(Stan());
         }
-        if (other.CompareTag($"WorkArea{playerNum}") && !isStun)
+        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible)
         {          
             if (batteryScript != null)
             {
