@@ -21,7 +21,9 @@ public class PlayerController : ActionScript
     EnergyScript energyScript;
 
     Vector3 takePos;
+    Vector3 takeRot;
     Vector3 catchPos;
+    Vector3 catchRot;
 
     //ÉvÉåÉCÉÑÅ[ÇÃî‘çÜ
     public int playerNum = 0;
@@ -50,7 +52,9 @@ public class PlayerController : ActionScript
     void Start()
     {
         takePos = takeRange.transform.localPosition;
+        takeRot = takeRange.transform.localEulerAngles;
         catchPos = catchRange.transform.localPosition;
+        catchRot = catchRange.transform.localEulerAngles;
 
         energyScript = GetComponent<EnergyScript>();
         playerRB = GetComponent<Rigidbody>();
@@ -178,7 +182,9 @@ public class PlayerController : ActionScript
             transform.localEulerAngles.z
             );
         takeRange.transform.localPosition = takePos;
+        takeRange.transform.localEulerAngles = takeRot;
         catchRange.transform.localPosition = catchPos;
+        catchRange.transform.localEulerAngles = catchRot;
 
         Invoke("ResetInvincible", invincibleTime);
     }
