@@ -20,7 +20,9 @@ public class PlayerController : ActionScript
     public int playerNum = 0;
     
     [SerializeField,Header("プレイヤーの移動速度")]
-    float MoveSpeed = 1.0f;   
+    float MoveSpeed = 1.0f;
+    [SerializeField, Header("振り向き速度")]
+    float rotateSpeed = 720f;
 
     //バッテリーの所持判定
     public bool haveBattery = false;
@@ -70,7 +72,7 @@ public class PlayerController : ActionScript
                 //float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
                 //プレイヤーを徐々に回転
                 Quaternion to = Quaternion.LookRotation(new Vector3(move.x, 0, move.y));
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, 720 * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, rotateSpeed * Time.deltaTime);
             }
         }
         else animator.SetBool("Iswalk", false);
@@ -91,11 +93,11 @@ public class PlayerController : ActionScript
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Discharge") && !isStun)
+        if (other.CompareTag("Discharge") && !isStun && !invincible)
         {
             StartCoroutine(Stan());
         }
-        if (other.CompareTag($"WorkArea{playerNum}") && !isStun)
+        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible)
         {          
             if (batteryScript != null)
             {
@@ -140,7 +142,11 @@ public class PlayerController : ActionScript
         energyScript.LostEnergy();
 
         invincible = true;
-        if (scoreScript.isWork) JobAnim(false);
+        if (scoreScript.isWork)
+        {
+            scoreScript.ChangeIsWork(false);
+            JobAnim(false);
+        }
         isStun = true;
         animator.SetBool("Isstun", true);
         
@@ -149,7 +155,11 @@ public class PlayerController : ActionScript
         yield return new WaitForSeconds(stanTime);
 
         isStun = false;
-        if (scoreScript.isWork) JobAnim(true);   
+        if (scoreScript.isWork)
+        {
+            scoreScript.ChangeIsWork(true);
+            JobAnim(true);
+        }  
         animator.SetBool("Isstun", false);
         
         transform.localRotation = Quaternion.Euler(
