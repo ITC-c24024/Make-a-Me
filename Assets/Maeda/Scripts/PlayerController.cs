@@ -11,10 +11,17 @@ public class PlayerController : ActionScript
     [SerializeField]
     TakeRange takeRangeSC;
     [SerializeField]
+    GameObject takeRange;
+    [SerializeField]
     CatchRange catchRangeSC;
+    [SerializeField]
+    GameObject catchRange;
     EnergyBatteryScript batteryScript;
     //エネルギー管理スクリプト
     EnergyScript energyScript;
+
+    Vector3 takePos;
+    Vector3 catchPos;
 
     //プレイヤーの番号
     public int playerNum = 0;
@@ -42,6 +49,9 @@ public class PlayerController : ActionScript
 
     void Start()
     {
+        takePos = takeRange.transform.localPosition;
+        catchPos = catchRange.transform.localPosition;
+
         energyScript = GetComponent<EnergyScript>();
         playerRB = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -167,6 +177,8 @@ public class PlayerController : ActionScript
             transform.localEulerAngles.y, 
             transform.localEulerAngles.z
             );
+        takeRange.transform.localPosition = takePos;
+        catchRange.transform.localPosition = catchPos;
 
         Invoke("ResetInvincible", invincibleTime);
     }
