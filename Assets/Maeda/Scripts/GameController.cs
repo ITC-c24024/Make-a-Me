@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 public class GameController : MonoBehaviour
 {
     TimerScript timerScript;
+    [SerializeField]
+    ShutterScript shutterScript;
 
     void Start()
     {
@@ -15,6 +17,12 @@ public class GameController : MonoBehaviour
 
         timerScript = this.GetComponent<TimerScript>();
 
+        Invoke("GameStart", 1.0f);
+    }
+
+    void GameStart()
+    {
+        StartCoroutine(shutterScript.OpenShutter());
         StartCoroutine(timerScript.Timer());
     }
 }
