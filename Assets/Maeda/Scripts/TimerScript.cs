@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class TimerScript : MonoBehaviour
 {
+    GameController gameController;
+    
     [SerializeField, Header("中心オブジェクト")]
     GameObject center;
     [SerializeField, Header("歯車外側")]
@@ -16,6 +18,11 @@ public class TimerScript : MonoBehaviour
 
     [SerializeField, Header("ゲーム時間(秒)")]
     float limitTime = 180;
+
+    void Start()
+    {
+        gameController = GetComponent<GameController>();
+    }
 
     /// <summary>
     /// スライダー制御
@@ -41,5 +48,7 @@ public class TimerScript : MonoBehaviour
 
             yield return null;
         }
+
+        gameController.GameFinish();
     }
 }
