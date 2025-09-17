@@ -62,7 +62,7 @@ public class PlayerController : ActionScript
     
     void Update()
     {
-        if (!isStun)
+        if (!isStun && !gameController.isFinish)
         {
             //“ü—Í’l‚ðVector2Œ^‚ÅŽæ“¾
             Vector2 move = moveAction.ReadValue<Vector2>();
@@ -111,11 +111,11 @@ public class PlayerController : ActionScript
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Discharge") && !isStun && !invincible)
+        if (other.CompareTag("Discharge") && !isStun && !invincible && !gameController.isFinish)
         {
             StartCoroutine(Stan());
         }
-        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible && haveBattery)
+        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible && haveBattery && !gameController.isFinish)
         {          
             if (batteryScript != null)
             {

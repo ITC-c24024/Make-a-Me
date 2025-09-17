@@ -10,7 +10,10 @@ public class ScoreManager : MonoBehaviour
         public int score;
         public int rank;
     }
-    Player[] players = new Player[4];     
+
+    public Player[] players = new Player[4];
+
+    public int maxScore =0;
 
     void Start()
     {
@@ -55,7 +58,7 @@ public class ScoreManager : MonoBehaviour
             int originIndex = sorted[i].index;
             players[originIndex].rank = currentRank;
         }
-        
+        maxScore = sorted[0].Player.score;
         for(int i = 0; i < players.Length; i++)
         {
             Debug.Log($"Player{i + 1}: Score={players[i].score}, Rank={players[i].rank}");

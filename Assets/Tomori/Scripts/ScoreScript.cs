@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
+    GameController gameController;
+    [SerializeField]
     AudioManager audioManager;
     [SerializeField]
     EnergyScript energyScript;
@@ -66,7 +68,7 @@ public class ScoreScript : MonoBehaviour
              clones[0].transform.position - player.transform.position
             ) <= 60;
 
-        if (lookforward && !isMove && isArea)
+        if (lookforward && !isMove && isArea && !gameController.isFinish)
         {
             isWork = true;
             playerController.JobAnim(true);

@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    CountDownScript countDownScript;
     [SerializeField]
     AudioManager audioManager;
     TimerScript timerScript;
@@ -15,13 +16,17 @@ public class GameController : MonoBehaviour
     ShutterScript shutterScript;
 
     public bool isStart = false;
+    public bool isFinish = false;
 
     void Start()
     {
         Application.targetFrameRate = 60;
 
+        countDownScript = GetComponent<CountDownScript>();
         timerScript = this.GetComponent<TimerScript>();
-
+        //audioManager.Main();
+        //isStart = true;
+        //StartCoroutine(timerScript.Timer());
         Invoke("Open", 1.0f);
     }
 
@@ -29,11 +34,17 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(shutterScript.OpenShutter());
     }
+
+    public void Count()
+    {
+        countDownScript.enabled = true;
+        Invoke("GameStart", 3.5f);
+    }
     /// <summary>
     /// タイマーを開始し、動けるようにする
     /// </summary>
-    public void GameStart()
-    {        
+    void GameStart()
+    {      
         StartCoroutine(timerScript.Timer());
         isStart = true;
         audioManager.Main();
@@ -52,8 +63,10 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameFinish()
     {
+        isFinish = true;
         audioManager.MainStop();
         StartCoroutine(shutterScript.CloseShutter());
+
         Invoke("ResultScene", 2.5f);
     }
 

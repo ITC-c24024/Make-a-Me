@@ -5,9 +5,16 @@ using UnityEngine.InputSystem;
 
 public class ControllerBindScript : MonoBehaviour
 {
+    GameController gameController;
     [SerializeField] private GameObject[] playersObj; // シーン上のP1〜P4
 
     int slotNum = 0;
+
+    void Start()
+    {
+        gameController = GetComponent<GameController>();
+    }
+
     public void OnPlayerJoined(PlayerInput joined)
     {
         // 仮オブジェクトかどうか判定
@@ -30,6 +37,10 @@ public class ControllerBindScript : MonoBehaviour
         // 仮オブジェクトを削除
         Destroy(joined.gameObject);
 
+        if (slotNum == 1)
+        {
+            gameController.Count();
+        }
         slotNum++;
     }
 }
