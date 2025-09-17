@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField]
+    AudioManager audioManager;
     TimerScript timerScript;
     [SerializeField]
     ShutterScript shutterScript;
@@ -25,9 +27,29 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(shutterScript.OpenShutter());
         StartCoroutine(timerScript.Timer());
+        Invoke("MainBGM", 2.5f);
+    }
+
+    void MainBGM()
+    {
+        audioManager.Main();
+    }
+
+    public void Notice()
+    {
+        audioManager.MainStop();
+        audioManager.MainSpeedUp();
+        MainBGM();
     }
 
     public void GameFinish()
+    {
+        audioManager.MainStop();
+        StartCoroutine(shutterScript.CloseShutter());
+        Invoke("ResultScene", 2.5f);
+    }
+
+    void ResultScene()
     {
         SceneManager.LoadScene("ResultScene");
     }

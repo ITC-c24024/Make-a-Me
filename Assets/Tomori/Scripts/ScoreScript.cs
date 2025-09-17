@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
+    AudioManager audioManager;
+    [SerializeField]
     EnergyScript energyScript;
     [SerializeField]
     PlayerController playerController;
@@ -59,12 +61,12 @@ public class ScoreScript : MonoBehaviour
 
     void Update()
     {
-        bool lookfoeward = Vector3.Angle(
+        bool lookforward = Vector3.Angle(
             player.transform.forward,
              clones[0].transform.position - player.transform.position
             ) <= 60;
 
-        if (lookfoeward && !isMove && isArea)
+        if (lookforward && !isMove && isArea)
         {
             isWork = true;
             playerController.JobAnim(true);
@@ -85,8 +87,6 @@ public class ScoreScript : MonoBehaviour
        
         if (isArea && !playerController.isStun)
         {
-            //Quaternion to = Quaternion.LookRotation(clones[0].transform.position);
-            //player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, to, 720 * Time.deltaTime);
             hammer.transform.position = follow.transform.position;
             hammer.transform.rotation = follow.transform.rotation;
         }
