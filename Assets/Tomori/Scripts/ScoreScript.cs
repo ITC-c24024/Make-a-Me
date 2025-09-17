@@ -37,7 +37,7 @@ public class ScoreScript : MonoBehaviour
     [SerializeField, Header("作業クールタイム")]
     float coolTime = 1.0f;
     //作業効率
-    private float[] efficiency = new float[] { 1.0f, 1.5f, 2.5f, 4.0f, 6.0f };
+    private float[] efficiency = new float[] { 2.0f, 2.5f, 3.5f, 5.0f, 7.0f };
 
     [SerializeField] int score = 0;
     public bool isWork = false;

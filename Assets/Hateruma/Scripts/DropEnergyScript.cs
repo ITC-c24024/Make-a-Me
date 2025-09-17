@@ -19,16 +19,16 @@ public class DropEnergyScript : MonoBehaviour
     //拾ったプレイヤーを紐づけ
     GameObject pickPlayer;
 
-    [SerializeField,Header("ドロップにかかる時間")] 
+    [SerializeField, Header("ドロップにかかる時間")]
     float dropTime = 1f;
 
-    [SerializeField,Header("ドロップオブジェクトがリセットされるまでの時間")] 
+    [SerializeField, Header("ドロップオブジェクトがリセットされるまでの時間")]
     int deleteTime;
 
-    [SerializeField,Header("取得可能な状態かどうかの判定")] 
+    [SerializeField, Header("取得可能な状態かどうかの判定")]
     bool drop;
 
-    [SerializeField,Header("//ドロップ中かどうかの判定")] 
+    [SerializeField, Header("//ドロップ中かどうかの判定")]
     bool start;
 
     //ドロップ、取得どちらなのかの判定
@@ -123,34 +123,36 @@ public class DropEnergyScript : MonoBehaviour
 
         dropEnergyAmount = amount;
 
+        gameObject.transform.localScale = new Vector3(0.25f + (0.002f * amount), 0.25f + (0.002f * amount), 0.25f + (0.002f * amount));
+
         //プレイヤーのポジションでドロップ
         currentPos = playerObj.transform.position;
 
         //ドロップ地点から半径3の円周上のランダムな地点にターゲットを指定
         var angle = Random.Range(0, 360);
         var rad = angle * Mathf.Deg2Rad;
-        var px = Mathf.Cos(rad) * 3f + currentPos.x;
-        var pz = Mathf.Sin(rad) * 3f + currentPos.z;
+        var px = Mathf.Cos(rad) * 5f + currentPos.x;
+        var pz = Mathf.Sin(rad) * 5f + currentPos.z;
 
         //ターゲット地点がステージ外にならないようにする
-        if (px <= -16.5f)//X軸
+        if (px <= -15.22f)//X軸
         {
-            px = -16.5f;
+            px = -15.22f;
         }
-        else if (px >= 16.5f)
+        else if (px >= 15.23f)
         {
-            px = 16.5f;
+            px = 15.23f;
         }
 
-        if (pz <= -12f)//Z軸
+        if (pz <= -12.98f)//Z軸
         {
-            pz = -12f;
+            pz = -12.98f;
         }
-        else if (pz >= 1f)
+        else if (pz >= 0.43f)
         {
-            pz = 1f;
+            pz = 0.43f;
         }
-        targetPos = new Vector3(px, currentPos.y, pz);
+        targetPos = new Vector3(px, 0.5f, pz);
 
 
         //山なりにドロップするようにする
@@ -196,15 +198,21 @@ public class DropEnergyScript : MonoBehaviour
     {
         isDrop = false;
 
-        dropTime = 0.5f;//拾う時間
+        // 点滅が動いていたら止める
+        if (blinkSC != null)
+        {
+            blinkSC.StopBlink();
+        }
+
+        dropTime = 0.5f; //拾う時間
 
         //拾った際のY軸の動き
         animCurveY = new AnimationCurve(
             new Keyframe(0, currentPos.y, 0, 10),
             new Keyframe(dropTime, targetPos.y + 0.5f, -10, 0)
-            );
+        );
 
-        currentPos = this.transform.localPosition;//現在の位置
+        currentPos = this.transform.localPosition; //現在の位置
 
         start = true;
 
@@ -217,7 +225,7 @@ public class DropEnergyScript : MonoBehaviour
 
         PosReset();
 
-        dropManagerSC.AddDrop(objNum);//拾われた際のリスト追加
+        dropManagerSC.AddDrop(objNum); //拾われた際のリスト追加
     }
 
     /// <summary>

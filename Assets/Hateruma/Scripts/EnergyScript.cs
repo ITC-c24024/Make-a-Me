@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class EnergyScript : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class EnergyScript : MonoBehaviour
     int energyAmount;
 
     [SerializeField, Header("レベルアップに必要なエネルギー量")]
-    int requireEnergy = 100;
+    int[] requireEnergy = { 100, 150, 200, 250, 300 };
 
     [SerializeField, Header("チャージ中")]
     bool isCharge;
@@ -68,12 +69,15 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("ハンマーオブジェクト")]
     GameObject[] hammerObj;
 
+    [SerializeField, Header("ハンマーの親オブジェクト")]
+    GameObject hammerMasterObj;
+
     private void Start()
     {
         dropManagerSC = gameObject.GetComponent<DropEnergyManagerScript>();
 
-        energySlider[0].maxValue = requireEnergy;
-        energySlider[1].maxValue = requireEnergy;
+        energySlider[0].maxValue = requireEnergy[0];
+        energySlider[1].maxValue = requireEnergy[0];
 
         uiPos = energyUIObj.transform;
 
@@ -107,16 +111,34 @@ public class EnergyScript : MonoBehaviour
     public void ChargeEnergy(int amount)
     {
 
-        if(allEnergyAmount < 700)
+        if (allEnergyAmount < 1000)
         {
             allEnergyAmount += amount;
         }
 
-        while (amount + energyAmount >= requireEnergy)
+        while (amount + energyAmount >= requireEnergy[level - 1])
         {
-            amount -= requireEnergy - energyAmount;
-            LevelUp();
+            amount -= requireEnergy[level - 1] - energyAmount;
+
+            if (level != maxLevel)
+            {
+                LevelUp();
+            }
+            else
+            {
+                // レベル最大ならゲージを埋め切って終了
+                energyAmount = requireEnergy[level - 1];
+                energySlider[0].maxValue = requireEnergy[level - 1];
+                energySlider[1].maxValue = requireEnergy[level - 1];
+                energySlider[0].value = energyAmount;
+                energySlider[1].value = energyAmount;
+
+                amount = 0;
+                break;
+            }
+
         }
+
 
         if (amount > 0)
         {
@@ -133,30 +155,52 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     public void LostEnergy()
     {
-        if (allEnergyAmount > 0)
+        if (allEnergyAmount <= 0) return;
+
+        // 総量の半分をドロップ
+        int amount = allEnergyAmount / 2;
+        dropManagerSC.Drop(amount);
+        allEnergyAmount -= amount;
+
+        while (amount > 0)
         {
-            var amount = allEnergyAmount / 3;
-
-            dropManagerSC.Drop(amount);
-
-            allEnergyAmount -= amount;
-
-            while (amount > energyAmount)
+            if (energyAmount >= amount)
             {
-                amount -= energyAmount;
-                LevelDown();
-            }
-
-            if (amount > 0)
-            {
+                // 今のレベルで減らしきれる
                 energyAmount -= amount;
-                energySlider[0].value = energyAmount;
-                energySlider[1].value = energyAmount;
+                amount = 0;
+            }
+            else
+            {
+                // 今のレベルのゲージを全部使い切る
+                amount -= energyAmount;
+                energyAmount = 0;
+
+                // まだ減らす分が残っていて、レベル > 1 ならダウン
+                if (level > 1)
+                {
+                    LevelDown();
+                    // レベルダウンしたら次のゲージは満タンからスタート
+                    energyAmount = requireEnergy[level - 1];
+                }
+                else
+                {
+                    // レベル1で削り切ったらゼロ
+                    amount = 0;
+                }
             }
         }
 
+        // スライダー更新
+        energySlider[0].maxValue = requireEnergy[Mathf.Clamp(level - 1, 0, requireEnergy.Length - 1)];
+        energySlider[1].maxValue = energySlider[0].maxValue;
+        energySlider[0].value = energyAmount;
+        energySlider[1].value = energyAmount;
+
         ShowSlider();
     }
+
+
 
     /// <summary>
     /// レベルアップ用
@@ -170,16 +214,15 @@ public class EnergyScript : MonoBehaviour
         hammerObj[level - 1].SetActive(true);
         hammerImage.sprite = hammerSprite[level - 1];
 
-        if (level < maxLevel)
-        {
-            requireEnergy += 50;
-            energyAmount = 0;
+        StartCoroutine(BounceObject(hammerMasterObj.transform, 0.3f));
+        StartCoroutine(BounceObject(levelImage[0].transform, 0.3f));
 
-            energySlider[0].maxValue += 50;
-            energySlider[1].maxValue += 50;
-            energySlider[0].value = 0;
-            energySlider[1].value = 0;
-        }
+        energyAmount = 0;
+
+        energySlider[0].maxValue = requireEnergy[level - 1];
+        energySlider[1].maxValue = requireEnergy[level - 1];
+        energySlider[0].value = 0;
+        energySlider[1].value = 0;
 
         levelImage[0].sprite = levelSprite1[level - 1];
         levelImage[1].sprite = levelSprite2[level - 1];
@@ -197,20 +240,41 @@ public class EnergyScript : MonoBehaviour
         hammerObj[level - 1].SetActive(true);
         hammerImage.sprite = hammerSprite[level - 1];
 
-        if (level > 1)
-        {
-            requireEnergy -= 50;
-            energyAmount = requireEnergy;
+        StartCoroutine(BounceObject(hammerMasterObj.transform, 0.3f));
+        StartCoroutine(BounceObject(levelImage[0].transform, 0.3f));
 
-            energySlider[0].maxValue -= 50;
-            energySlider[1].maxValue -= 50;
-            energySlider[0].value = requireEnergy;
-            energySlider[1].value = requireEnergy;
-        }
+        energySlider[0].maxValue = requireEnergy[level - 1];
+        energySlider[1].maxValue = requireEnergy[level - 1];
+        energySlider[0].value = energyAmount;
+        energySlider[1].value = energyAmount;
 
         levelImage[0].sprite = levelSprite1[level - 1];
         levelImage[1].sprite = levelSprite2[level - 1];
     }
+
+    IEnumerator BounceObject(Transform target, float time)
+    {
+        float t = 0f;
+        Vector3 startScale = Vector3.zero;
+        Vector3 endScale = Vector3.one;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / time;
+
+            float s = 2f;
+            float curved = 1f + s * Mathf.Pow(t - 1f, 3) + s * Mathf.Pow(t - 1f, 2);
+
+            target.localScale = Vector3.LerpUnclamped(startScale, endScale, curved);
+            yield return null;
+        }
+
+        target.localScale = Vector3.one;
+    }
+
+
+
+
 
     /// <summary>
     /// エネルギーチャージ中かどうかの切り替え用

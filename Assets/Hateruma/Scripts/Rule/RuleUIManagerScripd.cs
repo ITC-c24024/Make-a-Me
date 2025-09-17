@@ -15,6 +15,10 @@ public class RuleUIManagerScripd : UIManagerScript
     [SerializeField, Header("Topic‚Ìà–¾“®‰æ")]
     Image[] movieImage;
 
+    [SerializeField, Header("Exit‚ÌImage")]
+    Image exitImage;
+
+    //‘I‘ð’†‚ÌUI‚Ì”Ô†
     int selectNum;
     void Start()
     {
@@ -27,26 +31,68 @@ public class RuleUIManagerScripd : UIManagerScript
 
         if (stickMove.y > 0.2f && !isCoolTime)
         {
+            if (selectNum == topicImage.Length)
+            {
+                exitImage.enabled = false;
+            }
+            else
+            {
+                topicImage[selectNum].enabled = false;
+                sentenceImage[selectNum].enabled = false;
+            }
+
             if (selectNum > 0)
             {
                 selectNum--;
             }
             else if (selectNum == 0)
             {
-                selectNum = topicImage.Length - 1;
+                selectNum = topicImage.Length;
             }
+
+            if(selectNum == topicImage.Length)
+            {
+                exitImage.enabled = true;
+            }
+            else
+            {
+                topicImage[selectNum].enabled = true;
+                sentenceImage[selectNum].enabled = true;
+            }
+
             StartCoroutine(SelectCoolTime());
         }
         if (stickMove.y < -0.2f && !isCoolTime)
         {
-            if (selectNum < topicImage.Length - 1)
+            if (selectNum == topicImage.Length)
+            {
+                exitImage.enabled = false;
+            }
+            else
+            {
+                topicImage[selectNum].enabled = false;
+                sentenceImage[selectNum].enabled = false;
+            }
+
+            if (selectNum < topicImage.Length)
             {
                 selectNum++;
             }
-            else if (selectNum == topicImage.Length - 1)
+            else if (selectNum == topicImage.Length)
             {
                 selectNum = 0;
             }
+
+            if (selectNum == topicImage.Length)
+            {
+                exitImage.enabled = true;
+            }
+            else
+            {
+                topicImage[selectNum].enabled = true;
+                sentenceImage[selectNum].enabled = true;
+            }
+
             StartCoroutine(SelectCoolTime());
         }
     }
