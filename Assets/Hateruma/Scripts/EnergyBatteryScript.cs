@@ -30,19 +30,38 @@ public class EnergyBatteryScript : MonoBehaviour
     //放電重複しないようにするフラグ
     bool isDischarge;
 
+    [SerializeField, Header("はねの大きさ")]
+    float bounceScale = 0.2f; // ±20%膨らむ
+    [SerializeField, Header("はねの速度")]
+    float bounceSpeed = 5f;
+
+    Vector3 baseScale;
+
     void Start()
     {
-        batteryRB = gameObject.GetComponent<Rigidbody>();
+        batteryRB = GetComponent<Rigidbody>();
+        baseScale = transform.localScale; // 元のスケールを保持
     }
 
     void Update()
     {
         if (ownerObj != null)
         {
-            transform.position = ownerObj.transform.position + new Vector3(0,0);
+            // 所持者に追従
+            transform.position = ownerObj.transform.position;
             transform.rotation = ownerObj.transform.rotation * Quaternion.Euler(0, 90, 90);
+
+            // スケールを繰り返し変化
+            float scaleFactor = 1f + Mathf.Sin(Time.time * bounceSpeed) * bounceScale;
+            transform.localScale = baseScale * scaleFactor;
+        }
+        else
+        {
+            // 所持していない場合は元のスケールに戻す
+            transform.localScale = baseScale;
         }
     }
+
 
 
     /// <summary>
@@ -77,7 +96,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// </summary>
     public void Throw()
     {
-        var ownerForward = Quaternion.AngleAxis(-5, ownerObj.transform.right) * ownerObj.transform.forward;
+        var ownerForward = Quaternion.AngleAxis(-45, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
         batteryRB.isKinematic = false;
@@ -181,7 +200,7 @@ public class EnergyBatteryScript : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         batteryRB.isKinematic = false;
-        batteryRB.AddForce(selectObj.transform.forward * throwPower / 2,ForceMode.Impulse);
+        batteryRB.AddForce(selectObj.transform.forward * throwPower/1.5f,ForceMode.Impulse);
 
 
 

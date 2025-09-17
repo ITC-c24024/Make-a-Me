@@ -5,32 +5,27 @@ using UnityEngine;
 
 public class BlinkScript : MonoBehaviour
 {
-    //オブジェクトのメッシュ
-    MeshRenderer mesh;
-
-    //点滅処理のコルーチン
-    Coroutine blinkCoroutine;
-
-    [SerializeField,Header("子オブジェクトを含むかどうか")] 
+    [SerializeField, Header("子オブジェクトを含むかどうか")]
     bool all;
 
-    //子オブジェクト
-    Transform[] childObj;
+    Coroutine blinkCoroutine;
+
+    GameObject[] childTargets;
 
     void Start()
     {
-        mesh = gameObject.GetComponent<MeshRenderer>();//オブジェクトのメッシュ取得
+        if (all)
+        {
+            childTargets = new GameObject[transform.childCount];
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                childTargets[i] = transform.GetChild(i).gameObject;
+            }
+        }
     }
 
-    /// <summary>
-    /// ブリンク(点滅)させる
-    /// </summary>
-    /// <param name="time">点滅時間</param>
-    /// <param name="speed">点滅周期</param>
-    /// <param name="lastSpeed">消える寸前の点滅周期</param>
     public void BlinkStart(int time, float speed, float lastSpeed)
     {
-        //すでに実行されていた場合に重複しないように処理を止めて新しくスタートさせる
         if (blinkCoroutine != null)
         {
             StopCoroutine(blinkCoroutine);
@@ -38,27 +33,62 @@ public class BlinkScript : MonoBehaviour
         blinkCoroutine = StartCoroutine(BlinkCount(time, speed, lastSpeed));
     }
 
-    /// <summary>
-    /// ブリンク処理本体、BlinkStart関数からのみ呼びだす
-    /// </summary>
     IEnumerator BlinkCount(int time, float speed, float lastSpeed)
     {
-        var currentTime = 0f;//現在の時間
+        float currentTime = 0f;
+        MeshRenderer mesh = GetComponent<MeshRenderer>();
 
         while (currentTime < time)
         {
-            mesh.enabled = !mesh.enabled;//メッシュの表示切替
+            // 親はメッシュだけ切り替え
+            if (mesh != null) mesh.enabled = !mesh.enabled;
 
-            //残り2秒以下になったら点滅速度を変更
-            if (time-currentTime <= 2f)
+            // 子オブジェクトはSetActiveで切り替え
+            if (all)
+            {
+                foreach (var child in childTargets)
+                {
+                    child.SetActive(!child.activeSelf);
+                }
+            }
+
+            if (time - currentTime <= 2f)
             {
                 speed = lastSpeed;
             }
 
-            yield return new WaitForSeconds(speed);//点滅の周期分待つ
-            currentTime += speed;//待った分の時間を足す
+            yield return new WaitForSeconds(speed);
+            currentTime += speed;
         }
 
-        mesh.enabled = true;//最終的に表示状態になるようにする
+        // 最終的に全部表示
+        if (mesh != null) mesh.enabled = true;
+        if (all)
+        {
+            foreach (var child in childTargets) child.SetActive(true);
+        }
     }
+    public void StopBlink()
+    {
+        if (blinkCoroutine != null)
+        {
+            StopCoroutine(blinkCoroutine);
+            blinkCoroutine = null;
+        }
+
+        // 親を表示
+        MeshRenderer mesh = GetComponent<MeshRenderer>();
+        if (mesh != null) mesh.enabled = true;
+
+        // 子オブジェクトも全表示
+        if (all && childTargets != null)
+        {
+            foreach (var child in childTargets)
+            {
+                child.SetActive(true);
+            }
+        }
+    }
+
 }
+
