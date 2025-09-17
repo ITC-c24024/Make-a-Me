@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : ActionScript
 {
     [SerializeField]
+    GameController gameController;
+    [SerializeField]
     ScoreScript scoreScript;
     [SerializeField]
     TakeRange takeRangeSC;
@@ -68,7 +70,20 @@ public class PlayerController : ActionScript
             //入力値をVector2型で取得
             Vector2 move = moveAction.ReadValue<Vector2>();
 
-            if(move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
+            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) /*&& !scoreScript.isArea*/)
+            {
+                //スティックの角度を計算
+                //float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
+                //プレイヤーを徐々に回転
+                Quaternion to = Quaternion.LookRotation(new Vector3(move.x, 0, move.y));
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, rotateSpeed * Time.deltaTime);
+            }
+
+            if (gameController.isStart)
+            {
+                move = Vector2.zero;
+            }
+            if (move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1)
             {
                 animator.SetBool("Iswalk", true);
 
@@ -78,15 +93,6 @@ public class PlayerController : ActionScript
             else
             {
                 animator.SetBool("Iswalk", false);
-            }
-
-            if ((move.x > 0.1 || move.x < -0.1 || move.y > 0.1 || move.y < -0.1) /*&& !scoreScript.isArea*/)
-            {
-                //スティックの角度を計算
-                //float angle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg;
-                //プレイヤーを徐々に回転
-                Quaternion to = Quaternion.LookRotation(new Vector3(move.x, 0, move.y));
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, rotateSpeed * Time.deltaTime);
             }
         }
         else animator.SetBool("Iswalk", false);

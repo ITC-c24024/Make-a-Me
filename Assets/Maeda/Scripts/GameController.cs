@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     ShutterScript shutterScript;
 
+    public bool isStart = false;
+
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -32,6 +34,7 @@ public class GameController : MonoBehaviour
 
     void MainBGM()
     {
+        isStart = true;
         audioManager.Main();
     }
 
