@@ -22,29 +22,34 @@ public class GameController : MonoBehaviour
 
         timerScript = this.GetComponent<TimerScript>();
 
-        Invoke("GameStart", 1.0f);
+        Invoke("Open", 1.0f);
     }
 
-    void GameStart()
+    void Open()
     {
         StartCoroutine(shutterScript.OpenShutter());
-        StartCoroutine(timerScript.Timer());
-        Invoke("MainBGM", 2.5f);
     }
-
-    void MainBGM()
-    {
+    /// <summary>
+    /// タイマーを開始し、動けるようにする
+    /// </summary>
+    public void GameStart()
+    {        
+        StartCoroutine(timerScript.Timer());
         isStart = true;
         audioManager.Main();
     }
-
+    /// <summary>
+    /// BGMを加速
+    /// </summary>
     public void Notice()
     {
         audioManager.MainStop();
         audioManager.MainSpeedUp();
-        MainBGM();
+        audioManager.Main();
     }
-
+    /// <summary>
+    /// BGMを止め、シャッターを閉じる
+    /// </summary>
     public void GameFinish()
     {
         audioManager.MainStop();

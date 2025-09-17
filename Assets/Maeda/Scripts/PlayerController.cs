@@ -47,8 +47,6 @@ public class PlayerController : ActionScript
     //–³“G”»’è
     bool invincible = false;
 
-    Rigidbody playerRB;
-
     Animator animator;
 
     void Start()
@@ -59,7 +57,6 @@ public class PlayerController : ActionScript
         catchRot = catchRange.transform.localEulerAngles;
 
         energyScript = GetComponent<EnergyScript>();
-        playerRB = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
     
@@ -79,7 +76,7 @@ public class PlayerController : ActionScript
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, to, rotateSpeed * Time.deltaTime);
             }
 
-            if (gameController.isStart)
+            if (!gameController.isStart)
             {
                 move = Vector2.zero;
             }
