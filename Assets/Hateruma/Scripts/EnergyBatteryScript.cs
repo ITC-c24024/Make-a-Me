@@ -183,6 +183,8 @@ public class EnergyBatteryScript : MonoBehaviour
         batteryRB.isKinematic = false;
         batteryRB.AddForce(selectObj.transform.forward * throwPower / 2,ForceMode.Impulse);
 
+
+
         isDischarge = false;
     }
 }
