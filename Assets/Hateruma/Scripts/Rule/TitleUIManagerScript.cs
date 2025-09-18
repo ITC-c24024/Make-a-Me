@@ -8,7 +8,8 @@ public class TitleUIManagerScript : UIManagerScript
 {
     [SerializeField, Header("タイトルロゴ")]
     Image titleImage;
-
+    [SerializeField, Header("ボタンの親")]
+    GameObject buttonPar;
     [SerializeField, Header("タイトルのボタンImage")]
     Image[] buttonImage;
 
@@ -29,12 +30,19 @@ public class TitleUIManagerScript : UIManagerScript
 
     int selectNum;
 
+    [SerializeField] float gravity = 9.8f;
+    [SerializeField] float bounceFactor = 0.6f;
+    [SerializeField] float groundY = 0f;
+    private float velocity = 0f;
+    [SerializeField] float speed = 1.0f;
+
     bool canSelect;
 
     bool isTitle = true;
 
     void Start()
     {
+        audioManager.Title();
         canSelect = true;
     }
 
@@ -73,6 +81,8 @@ public class TitleUIManagerScript : UIManagerScript
 
     void ChangeSelect(int direction)
     {
+        audioManager.Select();
+
         // 現在の選択をOFF
         if (selectNum < buttonImage.Length)
         {
@@ -117,6 +127,8 @@ public class TitleUIManagerScript : UIManagerScript
 
     void Decision()
     {
+        audioManager.Dicide();
+
         switch (selectNum)
         {
             case 0:
@@ -168,6 +180,45 @@ public class TitleUIManagerScript : UIManagerScript
         // 完全に透明にする
         titleImage.color = new Color(startColor.r, startColor.g, startColor.b, 0f);
 
-        
+        isTitle = false;
+        StartCoroutine(SetButton());
+    }
+
+    IEnumerator SetButton()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        while (true)
+        {
+            // 重力加速
+            velocity -= gravity * Time.deltaTime * speed;
+
+            // 位置を更新
+            buttonPar.transform.localPosition += Vector3.up * velocity * Time.deltaTime;
+
+            // 地面に着いたら跳ね返る
+            if (buttonPar.transform.localPosition.y <= groundY)
+            {
+                buttonPar.transform.localPosition = new Vector3(
+                    buttonPar.transform.localPosition.x,
+                    groundY,
+                    buttonPar.transform.localPosition.z
+                    );
+
+                // 反発＋減衰
+                velocity = -velocity * bounceFactor;
+
+                // 速度が小さすぎたら完全停止
+                if (Mathf.Abs(velocity) < 0.1f)
+                {
+                    velocity = 0f;
+                    canSelect = true;
+                    yield break; // コルーチン終了（動きを止める）
+                }
+            }
+
+            // 1フレーム待つ
+            yield return null;
+        }
     }
 }

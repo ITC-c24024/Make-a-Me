@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Title_RuleUIManagerScript : UIManagerScript
 {
+    [SerializeField]
+    AudioManager audioManager;
 
     [SerializeField, Header("TopicÇÃImage")]
     Image[] topicImage;
@@ -40,6 +42,8 @@ public class Title_RuleUIManagerScript : UIManagerScript
 
         if (decisionAction.triggered && selectNum == topicImage.Length)
         {
+            audioManager.Dicide();
+
             titleUISC.SelectOK();
             gameObject.SetActive(false);
         }
@@ -47,6 +51,8 @@ public class Title_RuleUIManagerScript : UIManagerScript
 
     void ChangeSelect(int direction)
     {
+        audioManager.Select();
+
         // åªç›ÇÃëIëÇOFF
         if (selectNum < topicImage.Length)
         {
