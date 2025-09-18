@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class EnergyBatteryScript : MonoBehaviour
 {
+    [SerializeField]
+    AudioManager audioManager;
+
     [SerializeField, Header("Š‚µ‚Ä‚¢‚éƒvƒŒƒCƒ„[‚Ì”Ô†")]
     int ownerNum;
 
@@ -165,7 +168,8 @@ public class EnergyBatteryScript : MonoBehaviour
         }
         else
         {
-            isDischarge = true;
+            audioManager.Discharge();
+            isDischarge = true;          
         }
 
         yield return null;

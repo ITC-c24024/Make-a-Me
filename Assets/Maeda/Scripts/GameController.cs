@@ -15,6 +15,15 @@ public class GameController : MonoBehaviour
     [SerializeField]
     ShutterScript shutterScript;
 
+    [SerializeField]
+    GameObject finishImage;
+
+    float scaleChangeTime = 1f;
+    float startScaleChageTime = 0.3f;
+
+    Vector3 originalScale;
+    Vector3 targetScale;
+
     public bool isStart = false;
     public bool isFinish = false;
 
@@ -24,9 +33,9 @@ public class GameController : MonoBehaviour
 
         countDownScript = GetComponent<CountDownScript>();
         timerScript = this.GetComponent<TimerScript>();
-        //audioManager.Main();
-        //isStart = true;
-        //StartCoroutine(timerScript.Timer());
+
+        targetScale = new Vector3(1, 1, 1);
+
         Invoke("Open", 1.0f);
     }
 
@@ -34,17 +43,14 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(shutterScript.OpenShutter());
     }
-
-    public void Count()
-    {
-        countDownScript.enabled = true;
-        Invoke("GameStart", 3.5f);
-    }
     /// <summary>
     /// タイマーを開始し、動けるようにする
     /// </summary>
-    void GameStart()
-    {      
+    public IEnumerator GameStart()
+    {
+        countDownScript.enabled = true;
+        yield return new WaitForSeconds(3.5f);
+
         StartCoroutine(timerScript.Timer());
         isStart = true;
         audioManager.Main();
@@ -61,17 +67,33 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// BGMを止め、シャッターを閉じる
     /// </summary>
-    public void GameFinish()
+    public IEnumerator GameFinish()
     {
+        StartCoroutine(FinishScaleUp());
+        yield return new WaitForSeconds(0.3f);
+
         isFinish = true;
         audioManager.MainStop();
         StartCoroutine(shutterScript.CloseShutter());
 
-        Invoke("ResultScene", 2.5f);
+        yield return new WaitForSeconds(2.5f);
+        SceneManager.LoadScene("ResultScene");
     }
 
-    void ResultScene()
+    IEnumerator FinishScaleUp()
     {
-        SceneManager.LoadScene("ResultScene");
+        finishImage.SetActive(true);
+        float timer = 0f;
+        while (timer < startScaleChageTime)
+        {
+            timer += Time.deltaTime;
+            float scaleChangeTime = timer / startScaleChageTime;
+            finishImage.transform.localScale = Vector3.Lerp(originalScale, targetScale, scaleChangeTime);
+
+            yield return null;
+        }
+        finishImage.transform.localScale = targetScale;//スケールを保存
+
+        yield return new WaitForSeconds(0.5f);//0.5秒待って下の処理を実行
     }
 }

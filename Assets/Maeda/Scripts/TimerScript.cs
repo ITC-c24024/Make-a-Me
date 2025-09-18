@@ -39,7 +39,7 @@ public class TimerScript : MonoBehaviour
         while (currentTime < limitTime)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > limitTime * 5 / 6 && !isNotice)
+            if (currentTime > limitTime * 1 / 6 && !isNotice)
             {
                 isNotice = true;
                 StartCoroutine(Notice());
@@ -59,23 +59,30 @@ public class TimerScript : MonoBehaviour
 
             yield return null;
         }
-
-        gameController.GameFinish();
+        isNotice = false;
+        StartCoroutine(gameController.GameFinish());
     }
-
+    /// <summary>
+    /// タイマーUIをもわんもわんさせる
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Notice()
     {
         Vector3 startScale = timerObj.transform.localScale;
-        float time = 0;
-        while (time < 2.5f)
+        float changeT = 0.5f;
+        while (isNotice)
         {
-            time += Time.deltaTime;
-      
-            float rate = Mathf.Lerp(0, 3*3.14f, time / 2.5f);
-            Vector3 currentScale = startScale * (1 + Mathf.Abs(Mathf.Sin(rate)));
-            timerObj.transform.localScale = currentScale;
+            float time = 0;
+            while (time < changeT)
+            {
+                time += Time.deltaTime;
 
-            yield return null;
-        }
+                float rate = Mathf.Lerp(0, 3.14f, time / changeT);
+                Vector3 currentScale = startScale * (1 + Mathf.Abs(Mathf.Sin(rate)) * 0.2f);
+                timerObj.transform.localScale = currentScale;
+
+                yield return null;
+            }
+        }  
     }
 }
