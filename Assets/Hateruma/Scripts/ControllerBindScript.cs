@@ -39,7 +39,7 @@ public class ControllerBindScript : MonoBehaviour
 
         if (slotNum == 1)
         {
-            gameController.Count();
+            StartCoroutine(gameController.GameStart());
         }
         slotNum++;
     }
