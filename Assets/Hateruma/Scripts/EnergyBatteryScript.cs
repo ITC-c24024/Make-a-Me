@@ -99,7 +99,7 @@ public class EnergyBatteryScript : MonoBehaviour
     /// </summary>
     public void Throw()
     {
-        var ownerForward = Quaternion.AngleAxis(-45, ownerObj.transform.right) * ownerObj.transform.forward;
+        var ownerForward = Quaternion.AngleAxis(-0, ownerObj.transform.right) * ownerObj.transform.forward;
 
         ownerObj = null;
         batteryRB.isKinematic = false;

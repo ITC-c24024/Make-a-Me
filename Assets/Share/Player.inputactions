@@ -80,6 +80,17 @@
                 },
                 {
                     "name": "",
+                    "id": "60e922dd-b788-4d9c-a354-1ec554251ace",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d6a6a2f0-5be3-4fe6-afbe-7e4bdd7cd44c",
                     "path": "<SwitchProControllerHID>/start",
                     "interactions": "",

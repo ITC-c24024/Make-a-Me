@@ -17,6 +17,10 @@ TagManager:
   - WorkArea2
   - WorkArea3
   - WorkArea4
+  - ResultCloneRed
+  - ResultCloneBlue
+  - ResultCloneGreen
+  - ResultCloneYellow
   layers:
   - Default
   - TransparentFX

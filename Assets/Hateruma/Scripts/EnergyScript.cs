@@ -21,8 +21,11 @@ public class EnergyScript : MonoBehaviour
     [SerializeField, Header("レベルごとの取得エネルギ―量")]
     int energyAmount;
 
-    [SerializeField, Header("レベルアップに必要なエネルギー量")]
-    int[] requireEnergy = { 100, 150, 200, 250, 300 };
+    //レベルアップに必要なエネルギー量
+    int[] requireEnergy = { 50, 75, 100, 125, 150 };
+
+    //レベルに応じてのドロップ割合
+    float[] dropRate = { 0.2f, 0.3f, 0.5f, 0.7f, 0.8f };
 
     [SerializeField, Header("チャージ中")]
     bool isCharge;
@@ -88,8 +91,8 @@ public class EnergyScript : MonoBehaviour
     {
         if (isCharge)
         {
-            // 1秒ごとに5ずつチャージされる
-            timer += Time.deltaTime * 20;
+            // 1秒ごとに20ずつチャージされる
+            timer += Time.deltaTime * 10;
             if (timer >= 1f)
             {
                 ChargeEnergy(1);
@@ -111,7 +114,7 @@ public class EnergyScript : MonoBehaviour
     public void ChargeEnergy(int amount)
     {
 
-        if (allEnergyAmount < 1000)
+        if (allEnergyAmount < 500)
         {
             allEnergyAmount += amount;
         }
@@ -157,8 +160,8 @@ public class EnergyScript : MonoBehaviour
     {
         if (allEnergyAmount <= 0) return;
 
-        // 総量の半分をドロップ
-        int amount = allEnergyAmount / 2;
+        // 総量のうち、レベルに応じてエネルギーをドロップ
+        int amount = Mathf.CeilToInt(allEnergyAmount * dropRate[level-1]);
         dropManagerSC.Drop(amount);
         allEnergyAmount -= amount;
 
