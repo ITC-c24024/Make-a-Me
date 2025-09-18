@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(PlayerInput))]
 
@@ -28,7 +27,7 @@ public class PoseScript : MonoBehaviour
 
 
     //ポーズ画面アクション
-    private InputAction stickAction, selectAction, poseAction;
+    private InputAction stickAction, decideAction, poseAction;
 
     private AnimationCurve animationCurve;
 
@@ -41,8 +40,8 @@ public class PoseScript : MonoBehaviour
         var actionMap = input.currentActionMap;
 
         stickAction = actionMap["Move"];
-        selectAction = actionMap["PickUp"];
-        poseAction = actionMap["PutIn"];
+        decideAction = actionMap["Decision"];
+        poseAction = actionMap["Pose"];
 
         animationCurve = new AnimationCurve(
             new Keyframe(0f, 0f),
@@ -68,7 +67,7 @@ public class PoseScript : MonoBehaviour
 
 
         //決定
-        var selectAct = selectAction.triggered;
+        var selectAct = decideAction.triggered;
 
         if (selectAct && Time.timeScale == 0)
         {
