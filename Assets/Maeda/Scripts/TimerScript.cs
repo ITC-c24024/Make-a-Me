@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TimerScript : MonoBehaviour
 {
     GameController gameController;
-    
+
+    [SerializeField,Header("タイマーUIの親")]
+    GameObject timerObj;
     [SerializeField, Header("中心オブジェクト")]
     GameObject center;
     [SerializeField, Header("歯車外側")]
@@ -18,6 +21,8 @@ public class TimerScript : MonoBehaviour
 
     [SerializeField, Header("ゲーム時間(秒)")]
     float limitTime = 180;
+
+    bool isNotice = false;
 
     void Start()
     {
@@ -34,6 +39,12 @@ public class TimerScript : MonoBehaviour
         while (currentTime < limitTime)
         {
             currentTime += Time.deltaTime;
+            if (currentTime > limitTime * 5 / 6 && !isNotice)
+            {
+                isNotice = true;
+                StartCoroutine(Notice());
+                gameController.Notice();
+            }
 
             gearOut.rectTransform.localEulerAngles += new Vector3(0, 0, -1);
             gearIn.rectTransform.localEulerAngles += new Vector3(0, 0, 4);
@@ -50,5 +61,21 @@ public class TimerScript : MonoBehaviour
         }
 
         gameController.GameFinish();
+    }
+
+    IEnumerator Notice()
+    {
+        Vector3 startScale = timerObj.transform.localScale;
+        float time = 0;
+        while (time < 2.5f)
+        {
+            time += Time.deltaTime;
+      
+            float rate = Mathf.Lerp(0, 3*3.14f, time / 2.5f);
+            Vector3 currentScale = startScale * (1 + Mathf.Abs(Mathf.Sin(rate)));
+            timerObj.transform.localScale = currentScale;
+
+            yield return null;
+        }
     }
 }

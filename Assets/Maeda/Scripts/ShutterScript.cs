@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ShutterScript : MonoBehaviour
 {
+    [SerializeField]
+    AudioManager audioManager;
     [SerializeField, Header("ŠJ•Â‚É‚©‚©‚éŽžŠÔ")]
-    float maxTime = 1.0f;
+    float maxTime = 2.0f;
 
     RectTransform rectTransform;
 
-    void Awake()
+    void Start()
     {
         rectTransform = GetComponent<RectTransform>();
     }
@@ -20,6 +23,9 @@ public class ShutterScript : MonoBehaviour
     /// <returns></returns>
     public IEnumerator CloseShutter()
     {
+        audioManager.Shutter();
+        yield return new WaitForSeconds(0.2f);
+
         float time = 0;
         
         while (time < maxTime)
@@ -42,6 +48,9 @@ public class ShutterScript : MonoBehaviour
     /// <returns></returns>
     public IEnumerator OpenShutter()
     {
+        audioManager.Shutter();
+        yield return new WaitForSeconds(0.2f);
+
         float time = 0;
 
         while (time < maxTime)
