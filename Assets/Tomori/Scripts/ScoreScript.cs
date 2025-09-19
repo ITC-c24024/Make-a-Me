@@ -39,7 +39,7 @@ public class ScoreScript : MonoBehaviour
     [SerializeField, Header("作業クールタイム")]
     float coolTime = 1.0f;
     //作業効率
-    private float[] efficiency = new float[] { 2.0f, 2.5f, 3.5f, 5.0f, 7.0f };
+    private float[] efficiency = new float[] { 2f, 3.5f, 5f, 7f, 10f };
 
     [SerializeField] int score = 0;
     public bool isWork = false;
@@ -53,12 +53,12 @@ public class ScoreScript : MonoBehaviour
     [SerializeField, Header("クローンの停止Z座標")]
     float stopPos;
 
-    [SerializeField,Header("完成クローンのAnimator")]
+    [SerializeField, Header("完成クローンのAnimator")]
     Animator animator;
 
     void Start()
     {
-        StartCoroutine(MoveMaterial());        
+        StartCoroutine(MoveMaterial());
     }
 
     void Update()
@@ -86,14 +86,14 @@ public class ScoreScript : MonoBehaviour
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
-       
+
         if (isArea && !playerController.isStun)
         {
             hammer.transform.position = follow.transform.position;
             hammer.transform.rotation = follow.transform.rotation;
         }
 
-        if(workTime >= maxTime / 2) //二段階
+        if (workTime >= maxTime / 2) //二段階
         {
             clones[0].SetActive(false);
             clones[1].SetActive(true);
@@ -137,21 +137,21 @@ public class ScoreScript : MonoBehaviour
         isMove = true;
 
         clones[0].SetActive(true);
-        
+
         float time = 0;
         while (time < coolTime)
         {
             time += Time.deltaTime;
 
             float currentPos = Mathf.Lerp(startPos, stopPos, time / coolTime);
-            for(int i = 0; i < clones.Length; i++)
+            for (int i = 0; i < clones.Length; i++)
             {
                 clones[i].transform.position = new Vector3(
                 clones[i].transform.position.x,
                 clones[i].transform.position.y,
                 currentPos
                 );
-            }           
+            }
 
             yield return null;
         }
@@ -170,7 +170,7 @@ public class ScoreScript : MonoBehaviour
     IEnumerator MoveClone()
     {
         isMove = true;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0f);
 
         float time = 0;
         while (time < coolTime)
@@ -193,7 +193,7 @@ public class ScoreScript : MonoBehaviour
 
         StartCoroutine(MoveMaterial());
         leftConveyorScript.AddList(playerController.playerNum);
-    }    
+    }
 
     void SetUI()
     {
@@ -212,14 +212,14 @@ public class ScoreScript : MonoBehaviour
             //十の位を表示
             scoreImage[1].enabled = true;
         }
-        
+
         scoreImage[0].sprite = numSprite[one];
         scoreImage[1].sprite = numSprite[ten];
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag($"Player{workAreaNum}"))
+        if (other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isArea = true;
             if (!isMove) isWork = true;
@@ -236,7 +236,7 @@ public class ScoreScript : MonoBehaviour
             playerController.JobAnim(isWork);
 
             hammer.transform.localPosition = new Vector3(0, 0, 0);
-            hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);          
+            hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }
