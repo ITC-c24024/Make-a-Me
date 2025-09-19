@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour
     Vector3 originalScale;
     Vector3 targetScale;
 
+    public bool isOpen = false;
     public bool isStart = false;
     public bool isFinish = false;
 
@@ -36,12 +37,16 @@ public class GameController : MonoBehaviour
 
         targetScale = new Vector3(1, 1, 1);
 
-        Invoke("Open", 1.0f);
+        StartCoroutine(Open());
     }
 
-    void Open()
+    IEnumerator Open()
     {
+        yield return new WaitForSeconds(1.0f);
         StartCoroutine(shutterScript.OpenShutter());
+
+        yield return new WaitForSeconds(2.0f);
+        isOpen = true;
     }
     /// <summary>
     /// タイマーを開始し、動けるようにする
@@ -56,11 +61,15 @@ public class GameController : MonoBehaviour
         audioManager.Main();
     }
     /// <summary>
-    /// BGMを加速
+    /// 警告音を鳴らし、BGMを加速
     /// </summary>
-    public void Notice()
+    public IEnumerator Notice()
     {
         audioManager.MainStop();
+
+        audioManager.Warning();
+        yield return new WaitForSeconds(3.0f);
+
         audioManager.MainSpeedUp();
         audioManager.Main();
     }
@@ -69,9 +78,6 @@ public class GameController : MonoBehaviour
     /// </summary>
     public IEnumerator GameFinish()
     {
-        StartCoroutine(FinishScaleUp());
-        yield return new WaitForSeconds(0.3f);
-
         isFinish = true;
         audioManager.MainStop();
         StartCoroutine(shutterScript.CloseShutter());

@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class PoseScript : MonoBehaviour
 {
     [SerializeField]
+    GameController gameController;
+    [SerializeField]
     AudioManager audioManager;
     [SerializeField]
     ShutterScript shutterScript;
@@ -59,7 +61,7 @@ public class PoseScript : MonoBehaviour
         //É|Å[ÉYâÊñ Ç…à⁄ìÆ
         var poseAct = poseAction.triggered;
 
-        if (poseAct)
+        if (poseAct && gameController.isOpen)
         {
             audioManager.Dicide();
 
