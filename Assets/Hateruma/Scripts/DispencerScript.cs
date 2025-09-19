@@ -16,7 +16,10 @@ public class DispencerScript : MonoBehaviour
     [SerializeField] List<GameObject> cloneObj; // SerializeField ‚ğc‚·
     List<Rigidbody> cloneRB;
 
-    public int cloneCount;
+    [SerializeField,Header("ƒNƒ[ƒ“‚Ì”")]
+    int cloneCount;
+
+
 
     private void Awake()
     {

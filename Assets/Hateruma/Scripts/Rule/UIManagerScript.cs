@@ -3,39 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
+
 
 public class UIManagerScript : MonoBehaviour
 {
-    //選択用
-    public InputAction selectAction;
+    [SerializeField] private InputActionAsset inputActions;
 
-    //決定用
+    public InputAction selectAction;
     public InputAction decisionAction;
 
     public bool isCoolTime;
+
     private void Awake()
     {
-        //ActionMapを取得
-        var input = gameObject.GetComponent<PlayerInput>();
-        var actionMap = input.currentActionMap;
-        //対応するアクションを取得
-        selectAction = actionMap["Select"];
-        decisionAction = actionMap["Decision"];
+        var actionMap = inputActions.FindActionMap("UI"); // UI用のActionMap名
+        selectAction = actionMap.FindAction("Select");
+        decisionAction = actionMap.FindAction("Decision");
+
+        selectAction.Enable();
+        decisionAction.Enable();
     }
+
     public IEnumerator SelectCoolTime()
     {
-        if (isCoolTime)
-        {
-            yield break;
-        }
-        else
-        {
-            isCoolTime = true;
-        }
+        if (isCoolTime) yield break;
 
+        isCoolTime = true;
         yield return new WaitForSeconds(0.2f);
-
         isCoolTime = false;
     }
 }
+
+
