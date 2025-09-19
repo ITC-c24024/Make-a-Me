@@ -10,6 +10,8 @@ public class PoseScript : MonoBehaviour
 {
     [SerializeField]
     AudioManager audioManager;
+    [SerializeField]
+    ShutterScript shutterScript;
     [SerializeField, Header("ポーズ画面")]
     GameObject poseImage;
 
@@ -40,8 +42,8 @@ public class PoseScript : MonoBehaviour
         var actionMap = input.currentActionMap;
 
         stickAction = actionMap["Move"];
-        decideAction = actionMap["Decision"];
-        poseAction = actionMap["Pose"];
+        decideAction = actionMap["Throw"];
+        poseAction = input.actions["Pose"];
 
         animationCurve = new AnimationCurve(
             new Keyframe(0f, 0f),
@@ -59,10 +61,20 @@ public class PoseScript : MonoBehaviour
 
         if (poseAct)
         {
-            //動けなくする
-            Time.timeScale = 0;
+            audioManager.Dicide();
 
-            poseImage.SetActive(true);
+            if (Time.timeScale == 1)
+            {
+                //動けなくする
+                Time.timeScale = 0;
+                poseImage.SetActive(true);
+            }
+            else
+            {
+                poseImage.SetActive(false);
+                Time.timeScale = 1;
+            }
+            
         }
 
 
@@ -71,21 +83,20 @@ public class PoseScript : MonoBehaviour
 
         if (selectAct && Time.timeScale == 0)
         {
+            audioManager.Dicide();
             switch (uiNum)
             {
                 case 0:
-                    audioManager.Dicide();
-
                     Invoke("DeletePanel", 0.3f);
 
                     //動けるようにする
                     Time.timeScale = 1;
                     break;
                 case 1:
-                    audioManager.Dicide();
                     //動けるようにする
                     Time.timeScale = 1;
-                    Invoke("SelectTitle", 0.3f);
+                    StartCoroutine(shutterScript.CloseShutter());
+                    Invoke("SelectTitle", 2.5f);
                     break;
             }
         }
@@ -136,7 +147,7 @@ public class PoseScript : MonoBehaviour
         Vector3 endScale = Vector3.one;
         while (t < 1f)
         {
-            t += Time.deltaTime / time;
+            t += Time.unscaledDeltaTime / time;
             float s = 2f;
             float curved = 1f + s * Mathf.Pow(t - 1f, 3) + s * Mathf.Pow(t - 1f, 2);
             target.localScale = Vector3.LerpUnclamped(startScale, endScale, curved);
@@ -144,49 +155,4 @@ public class PoseScript : MonoBehaviour
         }
         target.localScale = Vector3.one;
     }
-    /*
-    void StartAnimationForScene()
-    {
-        // 現在のコルーチンを停止
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-
-            // 現在のUIのスケールを元に戻す
-            GameObject currentUI = poseUI[uiNum];
-            currentUI.transform.localScale = new Vector3(0.3f, 0.3f, 1);  // 元のスケールにリセット
-        }
-
-        // 選択された UI の初期スケールを取得
-        GameObject targetUI = poseUI[uiNum];
-        Vector3 originalScale = targetUI.transform.localScale;
-
-        // 新しいコルーチンを開始
-        currentCoroutine = StartCoroutine(SelectUIScaleLoop(targetUI, originalScale));
-    }
-
-    //ScaleのUpとDownの処理
-    IEnumerator SelectUIScaleLoop(GameObject targetUI, Vector3 originalScale)
-    {
-        float elapsedTime = 0f;
-        Vector3 targetScale = originalScale * maxScale;
-
-        //無限ループ
-        while (true)
-        {
-            while (elapsedTime < maxTime)
-            {
-                elapsedTime += Time.unscaledDeltaTime;
-
-                // カーブに従ったスケール値を計算
-                float t = elapsedTime / maxTime;
-                float scaleFactor = animationCurve.Evaluate(t);
-                targetUI.transform.localScale = Vector3.Lerp(originalScale, targetScale, scaleFactor);
-
-                yield return null;
-            }
-
-            elapsedTime = 0f; // 経過時間をリセット
-        }
-    }*/
 }

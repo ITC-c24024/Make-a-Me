@@ -37,7 +37,7 @@ public class ControllerBindScript : MonoBehaviour
         // 仮オブジェクトを削除
         Destroy(joined.gameObject);
 
-        if (slotNum == 1)
+        if (slotNum == 0)
         {
             StartCoroutine(gameController.GameStart());
         }
