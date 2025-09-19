@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TimerScript : MonoBehaviour
 {
     GameController gameController;
+    CountDownScript countDownScript;
 
     [SerializeField,Header("タイマーUIの親")]
     GameObject timerObj;
@@ -23,10 +24,12 @@ public class TimerScript : MonoBehaviour
     float limitTime = 180;
 
     bool isNotice = false;
+    bool isCount = false;
 
     void Start()
     {
         gameController = GetComponent<GameController>();
+        countDownScript = GetComponent<CountDownScript>();
     }
 
     /// <summary>
@@ -39,11 +42,16 @@ public class TimerScript : MonoBehaviour
         while (currentTime < limitTime)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > limitTime * 5/6 && !isNotice)
+            if (currentTime > limitTime * 5 / 6 && !isNotice)
             {
                 isNotice = true;
                 StartCoroutine(Notice());
                 StartCoroutine(gameController.Notice());
+            }
+            else if (currentTime >= 27 && !isCount)
+            {
+                isCount = true;
+                countDownScript.CountSatrt();
             }
 
             gearOut.rectTransform.localEulerAngles += new Vector3(0, 0, -1);

@@ -9,19 +9,19 @@ public class CountDownScript : MonoBehaviour
     [SerializeField] GameObject countdownImageObject;
     [SerializeField] Image countdownImage;
     [SerializeField] Sprite[] newSprite;
-    [SerializeField] GameObject startImage;
+    [SerializeField] Image startImage;
+
     AnimationCurve animationCurve;
     float scaleChangeTime = 1f;
     float startScaleChageTime = 0.3f;
     Vector3 originalScale;
     Vector3 targetScale;
+    bool isTimer = false;
     bool isScaling = false; //重複してコルーチンを呼ばないようにする
-    bool isFalse = false;//スタートイメージを消すためのbool
+    bool isStart = true;//スタートとフィニッシュの切り替え
 
     void Start()
-    {
-        countdownImageObject.SetActive(true);
-        
+    {  
         animationCurve = new AnimationCurve(
             new Keyframe(0f, 0f),
             new Keyframe(0.5f, 1f),
@@ -33,42 +33,55 @@ public class CountDownScript : MonoBehaviour
         originalScale = countdownImageObject.transform.localScale;//最初のスケールを保存
         targetScale = new Vector3(1, 1, 1);//このスケールに向かって大きくする
 
-        StartCoroutine(NumberScaleChange());//カウントダウンをスタート
+        CountSatrt();//カウントダウンをスタート
     }
 
     void Update()
     {
-        if (timer > 0)
+        if (isTimer)
         {
-            timer -= Time.deltaTime;
-        }
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
 
-        //カウントダウンの処理
-        if (timer < 2)
-        {
-            countdownImage.sprite = newSprite[0];
-            if (!isScaling) StartCoroutine(NumberScaleChange());
-        }
-        if (timer < 1)
-        {
-            countdownImage.sprite = newSprite[1];
-            if (!isScaling) StartCoroutine(NumberScaleChange());
-        }
-        if (timer < 0 && !isFalse)
-        {
-            countdownImageObject.SetActive(false);
-            startImage.SetActive(true);
-            StartCoroutine(StartScaleUp());
-        }
-        else
-        {
-            startImage.SetActive(false);
-        }
+            //カウントダウンの処理
+            if (timer < 2)
+            {
+                countdownImage.sprite = newSprite[1];
+                if (!isScaling) StartCoroutine(NumberScaleChange());
+            }
+            if (timer < 1)
+            {
+                countdownImage.sprite = newSprite[2];
+                if (!isScaling) StartCoroutine(NumberScaleChange());
+            }
+            if (timer < 0)
+            {
+                countdownImageObject.SetActive(false);
+                startImage.enabled = true;
+                
+                StartCoroutine(StartScaleUp());
+                isTimer = false;
+                timer = 3;
+            }
+            else
+            {
+                startImage.enabled = false;
+            }
+        }    
     }
 
+    public void CountSatrt()
+    {
+        countdownImage.sprite = newSprite[0];
+        countdownImageObject.SetActive(true);
+        isTimer = true;
+        StartCoroutine(NumberScaleChange());
+    }
     //カウントダウンのスケールチェンジ
     IEnumerator NumberScaleChange()
-    {
+    {      
         isScaling = true; // コルーチンの重複実行を防ぐ
         float time = 0f;
 
@@ -100,7 +113,7 @@ public class CountDownScript : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);//0.5秒待って下の処理を実行
 
-        isFalse = true;//trueにしてスタートイメージをfalseにする
-        startImage.SetActive(false);
+        startImage.enabled = false;
+        startImage.sprite = newSprite[3];
     }
 }

@@ -78,9 +78,6 @@ public class GameController : MonoBehaviour
     /// </summary>
     public IEnumerator GameFinish()
     {
-        StartCoroutine(FinishScaleUp());
-        yield return new WaitForSeconds(0.3f);
-
         isFinish = true;
         audioManager.MainStop();
         StartCoroutine(shutterScript.CloseShutter());
