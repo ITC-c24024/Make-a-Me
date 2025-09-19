@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour
     AudioSource dischargeSource;
     [SerializeField, Header("レベルアップSE")]
     AudioSource levelUpSource;
+    [SerializeField, Header("警告SE")]
+    AudioSource warningSource;
 
     [SerializeField, Header("タイトルBGM")]
     AudioClip titleClip;
@@ -37,6 +39,8 @@ public class AudioManager : MonoBehaviour
     AudioClip dischargeClip;
     [SerializeField, Header("レベルアップSE")]
     AudioClip levelUpClip;
+    [SerializeField, Header("警告SE")]
+    AudioClip warningClip;
 
     public void Title()
     {
@@ -81,5 +85,9 @@ public class AudioManager : MonoBehaviour
     public void LevelUp()
     {
         levelUpSource.PlayOneShot(levelUpClip);
+    }
+    public void Warning()
+    {
+        warningSource.PlayOneShot(warningClip);
     }
 }

@@ -6,6 +6,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnergyScript : MonoBehaviour
 {
+    [SerializeField]
+    AudioManager audioManager;
+
     [SerializeField, Header("ÉvÉåÉCÉÑÅ[î‘çÜ")]
     int playerNum;
 
@@ -210,6 +213,8 @@ public class EnergyScript : MonoBehaviour
     /// </summary>
     void LevelUp()
     {
+        audioManager.LevelUp();
+
         level++;
         level = Mathf.Clamp(level, 1, maxLevel);
 

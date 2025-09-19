@@ -39,11 +39,11 @@ public class TimerScript : MonoBehaviour
         while (currentTime < limitTime)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > limitTime * 1 / 6 && !isNotice)
+            if (currentTime > limitTime * 5/6 && !isNotice)
             {
                 isNotice = true;
                 StartCoroutine(Notice());
-                gameController.Notice();
+                StartCoroutine(gameController.Notice());
             }
 
             gearOut.rectTransform.localEulerAngles += new Vector3(0, 0, -1);
