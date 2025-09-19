@@ -22,6 +22,8 @@ public class AudioManager : MonoBehaviour
     AudioSource levelUpSource;
     [SerializeField, Header("åxçêSE")]
     AudioSource warningSource;
+    [SerializeField, Header("î≠éÀSE")]
+    AudioSource shootSource;
 
     [SerializeField, Header("É^ÉCÉgÉãBGM")]
     AudioClip titleClip;
@@ -41,6 +43,8 @@ public class AudioManager : MonoBehaviour
     AudioClip levelUpClip;
     [SerializeField, Header("åxçêSE")]
     AudioClip warningClip;
+    [SerializeField, Header("î≠éÀSE")]
+    AudioClip shootClip;
 
     public void Title()
     {
@@ -89,5 +93,9 @@ public class AudioManager : MonoBehaviour
     public void Warning()
     {
         warningSource.PlayOneShot(warningClip);
+    }
+    public void Shoot()
+    {
+        shootSource.PlayOneShot(shootClip);
     }
 }
