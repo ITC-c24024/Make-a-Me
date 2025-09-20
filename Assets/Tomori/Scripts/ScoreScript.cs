@@ -70,6 +70,11 @@ public class ScoreScript : MonoBehaviour
 
         if (lookforward && !isMove && isArea && !gameController.isFinish)
         {
+            if (playerController.haveBattery)
+            {
+                playerController.Drop();
+            }
+            
             isWork = true;
             playerController.JobAnim(true);
         }
@@ -77,6 +82,8 @@ public class ScoreScript : MonoBehaviour
         {
             isWork = false;
             playerController.JobAnim(false);
+            hammer.transform.localPosition = new Vector3(0, 0, 0);
+            hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
         if (isWork && !playerController.isStun)
@@ -87,7 +94,7 @@ public class ScoreScript : MonoBehaviour
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
 
-        if (isArea && !playerController.isStun)
+        if (isWork && !playerController.isStun)
         {
             hammer.transform.position = follow.transform.position;
             hammer.transform.rotation = follow.transform.rotation;

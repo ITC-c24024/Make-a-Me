@@ -15,15 +15,6 @@ public class GameController : MonoBehaviour
     [SerializeField]
     ShutterScript shutterScript;
 
-    [SerializeField]
-    GameObject finishImage;
-
-    float scaleChangeTime = 1f;
-    float startScaleChageTime = 0.3f;
-
-    Vector3 originalScale;
-    Vector3 targetScale;
-
     public bool isOpen = false;
     public bool isStart = false;
     public bool isFinish = false;
@@ -34,8 +25,6 @@ public class GameController : MonoBehaviour
 
         countDownScript = GetComponent<CountDownScript>();
         timerScript = this.GetComponent<TimerScript>();
-
-        targetScale = new Vector3(1, 1, 1);
 
         StartCoroutine(Open());
     }
@@ -84,22 +73,5 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(2.5f);
         SceneManager.LoadScene("ResultScene");
-    }
-
-    IEnumerator FinishScaleUp()
-    {
-        finishImage.SetActive(true);
-        float timer = 0f;
-        while (timer < startScaleChageTime)
-        {
-            timer += Time.deltaTime;
-            float scaleChangeTime = timer / startScaleChageTime;
-            finishImage.transform.localScale = Vector3.Lerp(originalScale, targetScale, scaleChangeTime);
-
-            yield return null;
-        }
-        finishImage.transform.localScale = targetScale;//スケールを保存
-
-        yield return new WaitForSeconds(0.5f);//0.5秒待って下の処理を実行
     }
 }

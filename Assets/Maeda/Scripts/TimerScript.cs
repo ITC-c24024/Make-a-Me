@@ -48,7 +48,7 @@ public class TimerScript : MonoBehaviour
                 StartCoroutine(Notice());
                 StartCoroutine(gameController.Notice());
             }
-            else if (currentTime >= 27 && !isCount)
+            else if (currentTime >= limitTime - 3 && !isCount)
             {
                 isCount = true;
                 countDownScript.CountSatrt();

@@ -115,14 +115,15 @@ public class PlayerController : ActionScript
         {
             StartCoroutine(Stan());
         }
-        if (other.CompareTag($"WorkArea{playerNum}") && !isStun && !invincible && haveBattery && !gameController.isFinish)
-        {          
-            if (batteryScript != null)
-            {
-                ChangeHaveBattery(false);
-                batteryScript.Drop();
-                batteryScript = null;
-            }
+    }
+
+    public void Drop()
+    {
+        if (batteryScript != null)
+        {
+            ChangeHaveBattery(false);
+            batteryScript.Drop();
+            batteryScript = null;
         }
     }
 
