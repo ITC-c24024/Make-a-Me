@@ -13,6 +13,10 @@ public class TitleScene2 : MonoBehaviour
     private Vector3 startPosition3 = new Vector3(160.4f, 22.9f, -41f);
     private string yellStateName = "Yell"; // Animator のステート名に合わせる
 
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
     private void Start()
     {
         startPosition1 = players1[0].transform.position;

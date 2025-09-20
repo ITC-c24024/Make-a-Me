@@ -1,9 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]
+    Slider bgmSlider;
+    [SerializeField]
+    Slider seSlider;
+
+    [SerializeField]
+    AudioMixer audioMixer;
+    [SerializeField]
+    AudioMixerGroup bgmGrp;
+    [SerializeField]
+    AudioMixerGroup seGrp;
+
     [SerializeField,Header("タイトルBGM")]
     AudioSource titleSource;
     [SerializeField, Header("メインBGM")]
@@ -45,6 +60,31 @@ public class AudioManager : MonoBehaviour
     AudioClip warningClip;
     [SerializeField, Header("発射SE")]
     AudioClip shootClip;
+
+    void Start()
+    {
+        titleSource.outputAudioMixerGroup = bgmGrp;
+        mainSource.outputAudioMixerGroup = bgmGrp;
+        shutterSource.outputAudioMixerGroup = seGrp;
+        selectSource.outputAudioMixerGroup = seGrp;
+        dicideSource.outputAudioMixerGroup = seGrp;
+        workSource.outputAudioMixerGroup = seGrp;
+        dischargeSource.outputAudioMixerGroup = seGrp;
+        levelUpSource.outputAudioMixerGroup = seGrp;
+        warningSource.outputAudioMixerGroup = seGrp;
+        shootSource.outputAudioMixerGroup = seGrp;
+    }
+
+    void Update()
+    {       
+        if (bgmSlider != null && seSlider != null)
+        {
+            var bgmvalue = bgmSlider.value;
+            var seValue = seSlider.value;
+            audioMixer.SetFloat("Param_BGM", bgmvalue);
+            audioMixer.SetFloat("Param_SE", seValue);
+        }
+    }
 
     public void Title()
     {
