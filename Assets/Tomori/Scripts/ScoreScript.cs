@@ -49,6 +49,8 @@ public class ScoreScript : MonoBehaviour
 
     [SerializeField] int workAreaNum = 0;
 
+    float lookTime = 0;
+
     [SerializeField, Header("クローンのスタートZ座標")]
     float startPos;
     [SerializeField, Header("クローンの停止Z座標")]
@@ -75,12 +77,19 @@ public class ScoreScript : MonoBehaviour
             {
                 playerController.Drop();
             }
-            
-            isWork = true;
-            playerController.JobAnim(true);
+            //一瞬向いただけで仕事できないようにする
+            lookTime += Time.deltaTime;
+            if (lookTime >= 0.5f)
+            {
+                lookTime = 0;
+
+                isWork = true;
+                playerController.JobAnim(true);
+            }
         }
         else
         {
+            lookTime = 0;
             isWork = false;
             playerController.JobAnim(false);
             hammer.transform.localPosition = new Vector3(0, 0, 0);
@@ -98,8 +107,7 @@ public class ScoreScript : MonoBehaviour
 
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
-        }
-        
+        }      
         if (workTime >= maxTime / 2) //二段階
         {
             clones[0].SetActive(false);
@@ -129,37 +137,7 @@ public class ScoreScript : MonoBehaviour
             isWork = false;
         }
     }
-    /*
-    public void Work()
-    {
-        workTime += efficiency[energyScript.level - 1] / maxTime;
-        slider.gameObject.SetActive(true);
-        slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
-
-        if (workTime >= maxTime / 2) //二段階
-        {
-            clones[0].SetActive(false);
-            clones[1].SetActive(true);
-        }
-        if (workTime >= maxTime) //完成
-        {
-            clones[1].SetActive(false);
-            clones[2].SetActive(true);
-            animator.SetBool("IsYell", true);
-
-            isWork = false;
-            slider.gameObject.SetActive(false);
-            playerController.JobAnim(isWork);
-
-            workTime = 0;
-            score += 1;
-            scoreManager.ChangeScore(playerController.playerNum);
-            SetUI();
-
-            StartCoroutine(MoveClone());
-        }
-    }
-    */
+   
     public void ChangeIsWork(bool set)
     {
         isWork = set;
@@ -259,8 +237,6 @@ public class ScoreScript : MonoBehaviour
         if (other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isArea = true;
-            if (!isMove) isWork = true;
-            playerController.JobAnim(isWork);
         }
     }
 
