@@ -36,6 +36,7 @@ public class ScoreScript : MonoBehaviour
 
     public float maxTime = 10f;
     [SerializeField] float workTime = 0f;
+    [SerializeField] float progress = 0;
     [SerializeField, Header("作業クールタイム")]
     float coolTime = 1.0f;
     //作業効率
@@ -47,6 +48,8 @@ public class ScoreScript : MonoBehaviour
     bool isMove = false;
 
     [SerializeField] int workAreaNum = 0;
+
+    float lookTime = 0;
 
     [SerializeField, Header("クローンのスタートZ座標")]
     float startPos;
@@ -68,38 +71,43 @@ public class ScoreScript : MonoBehaviour
              clones[0].transform.position - player.transform.position
             ) <= 60;
 
-        if (lookforward && !isMove && isArea && !gameController.isFinish)
+        if (lookforward && !isMove && isArea && !gameController.isFinish && !playerController.isStun)
         {
             if (playerController.haveBattery)
             {
                 playerController.Drop();
             }
-            
-            isWork = true;
-            playerController.JobAnim(true);
+            //一瞬向いただけで仕事できないようにする
+            lookTime += Time.deltaTime;
+            if (lookTime >= 0.5f)
+            {
+                lookTime = 0;
+
+                isWork = true;
+                playerController.JobAnim(true);
+            }
         }
         else
         {
+            lookTime = 0;
             isWork = false;
             playerController.JobAnim(false);
             hammer.transform.localPosition = new Vector3(0, 0, 0);
             hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
-
-        if (isWork && !playerController.isStun)
+        if (isWork)
+        {
+            hammer.transform.position = follow.transform.position;
+            hammer.transform.rotation = follow.transform.rotation;
+        }
+        
+        if (isWork)
         {
             workTime += Time.deltaTime * efficiency[energyScript.level - 1];
 
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
-        }
-
-        if (isWork && !playerController.isStun)
-        {
-            hammer.transform.position = follow.transform.position;
-            hammer.transform.rotation = follow.transform.rotation;
-        }
-
+        }      
         if (workTime >= maxTime / 2) //二段階
         {
             clones[0].SetActive(false);
@@ -123,13 +131,13 @@ public class ScoreScript : MonoBehaviour
             StartCoroutine(MoveClone());
 
         }
-
+        
         if (playerController.haveBattery)
         {
             isWork = false;
         }
     }
-
+   
     public void ChangeIsWork(bool set)
     {
         isWork = set;
@@ -229,8 +237,6 @@ public class ScoreScript : MonoBehaviour
         if (other.gameObject.CompareTag($"Player{workAreaNum}"))
         {
             isArea = true;
-            if (!isMove) isWork = true;
-            playerController.JobAnim(isWork);
         }
     }
 

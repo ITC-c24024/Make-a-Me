@@ -7,6 +7,7 @@ public class CatchRange : ActionScript
 {
     EnergyBatteryScript batteryScript;
     PlayerController playerController;
+    [SerializeField] ScoreScript scoreScript;
 
     //Žæ‚ê‚é”»’è
     public bool canTake = false;
@@ -19,7 +20,7 @@ public class CatchRange : ActionScript
     void Update()
     {
         var takeAct = throwAction.triggered;
-        if (!playerController.haveBattery && takeAct && canTake && !isTimer && !playerController.isStun)
+        if (!playerController.haveBattery && takeAct && canTake && !isTimer && !playerController.isStun && !playerController.invincible && !scoreScript.isWork)
         {
             ChatchBattery();
         }
@@ -53,9 +54,7 @@ public class CatchRange : ActionScript
     private void OnTriggerExit(Collider other)
     {
         if (!playerController.haveBattery && other.gameObject.CompareTag("Battery"))
-        {
-            var energyBatterySC = other.gameObject.GetComponent<EnergyBatteryScript>();
-            
+        {            
             canTake = false;
             batteryScript = null;           
         }

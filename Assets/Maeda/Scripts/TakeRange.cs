@@ -22,7 +22,7 @@ public class TakeRange : ActionScript
     void Update()
     {
         var takeAct = throwAction.triggered;
-        if (!playerController.haveBattery && takeAct && canTake && !isTimer && !playerController.isStun && !scoreScript.isWork)
+        if (!playerController.haveBattery && takeAct && canTake && !isTimer && !playerController.isStun && !playerController.invincible && !scoreScript.isWork)
         {
             TakeBattery();
         }

@@ -35,10 +35,16 @@ public class AudioManager : MonoBehaviour
     AudioSource dischargeSource;
     [SerializeField, Header("レベルアップSE")]
     AudioSource levelUpSource;
+    [SerializeField, Header("レベルダウンSE")]
+    AudioSource levelDownSource;
     [SerializeField, Header("警告SE")]
     AudioSource warningSource;
     [SerializeField, Header("発射SE")]
     AudioSource shootSource;
+    [SerializeField, Header("リザルトBGM")]
+    AudioSource resultSource;
+    [SerializeField, Header("順位表示SE")]
+    AudioSource rankSource;
 
     [SerializeField, Header("タイトルBGM")]
     AudioClip titleClip;
@@ -56,10 +62,16 @@ public class AudioManager : MonoBehaviour
     AudioClip dischargeClip;
     [SerializeField, Header("レベルアップSE")]
     AudioClip levelUpClip;
+    [SerializeField, Header("レベルダウンSE")]
+    AudioClip levelDownClip;
     [SerializeField, Header("警告SE")]
     AudioClip warningClip;
     [SerializeField, Header("発射SE")]
     AudioClip shootClip;
+    [SerializeField, Header("リザルトBGM")]
+    AudioClip resultClip;
+    [SerializeField, Header("順位表示SE")]
+    AudioClip rankClip;
 
     void Start()
     {
@@ -71,8 +83,11 @@ public class AudioManager : MonoBehaviour
         workSource.outputAudioMixerGroup = seGrp;
         dischargeSource.outputAudioMixerGroup = seGrp;
         levelUpSource.outputAudioMixerGroup = seGrp;
+        levelDownSource.outputAudioMixerGroup = seGrp;
         warningSource.outputAudioMixerGroup = seGrp;
         shootSource.outputAudioMixerGroup = seGrp;
+        resultSource.outputAudioMixerGroup = bgmGrp;
+        rankSource.outputAudioMixerGroup = seGrp;
     }
 
     void Update()
@@ -130,6 +145,10 @@ public class AudioManager : MonoBehaviour
     {
         levelUpSource.PlayOneShot(levelUpClip);
     }
+    public void LevelDown()
+    {
+        levelDownSource.PlayOneShot(levelDownClip);
+    }
     public void Warning()
     {
         warningSource.PlayOneShot(warningClip);
@@ -137,5 +156,13 @@ public class AudioManager : MonoBehaviour
     public void Shoot()
     {
         shootSource.PlayOneShot(shootClip);
+    }
+    public void Result()
+    {
+        resultSource.PlayOneShot(resultClip);
+    }
+    public void Rank()
+    {
+        rankSource.PlayOneShot(rankClip);
     }
 }
