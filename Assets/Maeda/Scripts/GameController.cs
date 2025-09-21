@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(shutterScript.OpenShutter());
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(2.5f);
         isOpen = true;
         StartCoroutine(waitScript.SetUI());
     }

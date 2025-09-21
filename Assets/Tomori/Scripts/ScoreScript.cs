@@ -36,6 +36,7 @@ public class ScoreScript : MonoBehaviour
 
     public float maxTime = 10f;
     [SerializeField] float workTime = 0f;
+    [SerializeField] float progress = 0;
     [SerializeField, Header("作業クールタイム")]
     float coolTime = 1.0f;
     //作業効率
@@ -68,7 +69,7 @@ public class ScoreScript : MonoBehaviour
              clones[0].transform.position - player.transform.position
             ) <= 60;
 
-        if (lookforward && !isMove && isArea && !gameController.isFinish)
+        if (lookforward && !isMove && isArea && !gameController.isFinish && !playerController.isStun)
         {
             if (playerController.haveBattery)
             {
@@ -85,21 +86,20 @@ public class ScoreScript : MonoBehaviour
             hammer.transform.localPosition = new Vector3(0, 0, 0);
             hammer.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
-
-        if (isWork && !playerController.isStun)
+        if (isWork)
+        {
+            hammer.transform.position = follow.transform.position;
+            hammer.transform.rotation = follow.transform.rotation;
+        }
+        
+        if (isWork)
         {
             workTime += Time.deltaTime * efficiency[energyScript.level - 1];
 
             slider.gameObject.SetActive(true);
             slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
         }
-
-        if (isWork && !playerController.isStun)
-        {
-            hammer.transform.position = follow.transform.position;
-            hammer.transform.rotation = follow.transform.rotation;
-        }
-
+        
         if (workTime >= maxTime / 2) //二段階
         {
             clones[0].SetActive(false);
@@ -123,13 +123,43 @@ public class ScoreScript : MonoBehaviour
             StartCoroutine(MoveClone());
 
         }
-
+        
         if (playerController.haveBattery)
         {
             isWork = false;
         }
     }
+    /*
+    public void Work()
+    {
+        workTime += efficiency[energyScript.level - 1] / maxTime;
+        slider.gameObject.SetActive(true);
+        slider.value = Mathf.Lerp(0, 1, workTime / maxTime);
 
+        if (workTime >= maxTime / 2) //二段階
+        {
+            clones[0].SetActive(false);
+            clones[1].SetActive(true);
+        }
+        if (workTime >= maxTime) //完成
+        {
+            clones[1].SetActive(false);
+            clones[2].SetActive(true);
+            animator.SetBool("IsYell", true);
+
+            isWork = false;
+            slider.gameObject.SetActive(false);
+            playerController.JobAnim(isWork);
+
+            workTime = 0;
+            score += 1;
+            scoreManager.ChangeScore(playerController.playerNum);
+            SetUI();
+
+            StartCoroutine(MoveClone());
+        }
+    }
+    */
     public void ChangeIsWork(bool set)
     {
         isWork = set;
