@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField]
+    WaitScript waitScript;
     CountDownScript countDownScript;
     [SerializeField]
     AudioManager audioManager;
@@ -36,6 +38,7 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
         isOpen = true;
+        StartCoroutine(waitScript.SetUI());
     }
     /// <summary>
     /// タイマーを開始し、動けるようにする

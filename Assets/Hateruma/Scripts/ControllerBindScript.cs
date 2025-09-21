@@ -8,7 +8,12 @@ public class ControllerBindScript : MonoBehaviour
     GameController gameController;
     [SerializeField] private GameObject[] playersObj; // シーン上のP1〜P4
 
+    [SerializeField]
+    WaitScript waitScript;
+
     int slotNum = 0;
+    [SerializeField, Header("必要人数")]
+    int num = 3;
 
     void Start()
     {
@@ -17,6 +22,13 @@ public class ControllerBindScript : MonoBehaviour
 
     public void OnPlayerJoined(PlayerInput joined)
     {
+        if (!gameController.isOpen)
+        {
+            // 仮オブジェクトを削除
+            Destroy(joined.gameObject);
+            return;
+        }
+
         // 仮オブジェクトかどうか判定
         if (joined.gameObject.tag.StartsWith("P"))
         {
@@ -37,7 +49,8 @@ public class ControllerBindScript : MonoBehaviour
         // 仮オブジェクトを削除
         Destroy(joined.gameObject);
 
-        if (slotNum == 0)
+        waitScript.ChangeUI(slotNum);
+        if (slotNum == num)
         {
             StartCoroutine(gameController.GameStart());
         }
