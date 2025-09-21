@@ -73,7 +73,7 @@ public class WaitScript : MonoBehaviour
         square[num].gameObject.SetActive(false);
         okNum.sprite = okSprite[num];
         okUI[num].enabled = true;
-        if (num == 0)
+        if (num == 3)
         {
             waitText.enabled = false;
             StartCoroutine(DeleteUI());

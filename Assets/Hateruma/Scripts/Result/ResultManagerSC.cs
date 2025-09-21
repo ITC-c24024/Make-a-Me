@@ -27,6 +27,8 @@ public class ResultManagerSC : MonoBehaviour
     [SerializeField, Header("‡ˆÊ")]
     List<int> rank = new();
 
+    [SerializeField]
+    AudioManager audioManager;
     private void Awake()
     {
         scoreManaSC = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
@@ -40,7 +42,6 @@ public class ResultManagerSC : MonoBehaviour
 
     void Start()
     {
-        // Start‚Å‡ˆÊ‚ğæ“¾
         rank.Clear();
         for (int i = 0; i < 4; i++)
         {
@@ -59,15 +60,31 @@ public class ResultManagerSC : MonoBehaviour
 
             for (int i = 0; i < 4; i++)
             {
-                rankImage[i].sprite = rankSprite[rank[i] - 1]; 
-                rankImage[i].enabled = true;
-                StartCoroutine(BounceUI(rankImage[i].transform, 0.3f));
+                int playerRank = scoreManaSC.players[i].rank;
+
+                if (playerRank > 0 && playerRank <= rankSprite.Length)
+                {
+                    rankImage[i].sprite = rankSprite[playerRank - 1];
+                    rankImage[i].enabled = true;
+                    audioManager.Rank();
+                    StartCoroutine(BounceUI(rankImage[i].transform, 0.3f));
+                }
+                else
+                {
+                    rankImage[i].enabled = false;
+                    Debug.LogWarning($"Invalid rank for player {i + 1}: {playerRank}");
+                }
             }
 
-            yield return new WaitForSeconds(2);
+
+
+            yield return new WaitForSeconds(0.5f);
+
+            audioManager.Result();
+
+            yield return new WaitForSeconds(1.5f);
 
             buttonPanelObj.SetActive(true);
-            StartCoroutine(BounceUI(buttonPanelObj.transform, 0.3f));
         }
     }
 

@@ -18,9 +18,12 @@ public class ResultUIScript : UIManagerScript
 
     [SerializeField]
     AudioManager audioManager;
+
+    [SerializeField, Header("スコアマネージャースクリプト")]
+    ScoreManager scoreManaSC;
     void Start()
     {
-        
+        scoreManaSC = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
     }
 
     void Update()
@@ -29,14 +32,13 @@ public class ResultUIScript : UIManagerScript
 
         if (!isCoolTime)
         {
-            if (stickMove.y > 0.2f) ChangeSelect(-1); // 上
-            if (stickMove.y < -0.2f) ChangeSelect(1); // 下
-        }
+            if (stickMove.x > 0.2f) ChangeSelect(-1); // 上
+            if (stickMove.x < -0.2f) ChangeSelect(1); // 下
 
-        if (decisionAction.triggered && selectNum == buttonImage.Length)
-        {
-            audioManager.Dicide();
-            gameObject.SetActive(false);
+            if (decisionAction.triggered)
+            {
+                Decision();
+            }
         }
     }
 
@@ -93,12 +95,13 @@ public class ResultUIScript : UIManagerScript
         switch (selectNum)
         {
             case 0:
-                audioManager.TitleStop();
+                audioManager.ResultStop();
                 StartCoroutine(shutterScript.CloseShutter());
                 Invoke(nameof(MainScene), 2.5f);
                 break;
 
             case 1:
+                audioManager.ResultStop();
                 StartCoroutine(shutterScript.CloseShutter());
                 Invoke(nameof(TitleScene), 2.5f);
                 break;
