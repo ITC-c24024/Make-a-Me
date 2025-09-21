@@ -45,6 +45,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     public IEnumerator GameStart()
     {
+        yield return new WaitForSeconds(1.6f);
         countDownScript.enabled = true;
         yield return new WaitForSeconds(3.5f);
 

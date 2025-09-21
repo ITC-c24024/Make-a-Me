@@ -9,6 +9,8 @@ public class PlayerController : ActionScript
     [SerializeField]
     GameController gameController;
     [SerializeField]
+    CharaBlinkScript charaBlinkScript;
+    [SerializeField]
     ScoreScript scoreScript;
     [SerializeField]
     TakeRange takeRangeSC;
@@ -43,9 +45,9 @@ public class PlayerController : ActionScript
     //ÉXÉ^ÉìîªíË
     public bool isStun = false;
     [SerializeField, Header("ñ≥ìGéûä‘")]
-    float invincibleTime = 2.0f;
+    float invincibleTime = 1.0f;
     //ñ≥ìGîªíË
-    bool invincible = false;
+    public bool invincible = false;
 
     Animator animator;
 
@@ -162,6 +164,7 @@ public class PlayerController : ActionScript
         energyScript.LostEnergy();
 
         invincible = true;
+        charaBlinkScript.BlinkStart(true);
 
         isStun = true;
         animator.SetBool("Isstun", true);
@@ -185,14 +188,8 @@ public class PlayerController : ActionScript
         catchRange.transform.localPosition = catchPos;
         catchRange.transform.localEulerAngles = catchRot;
 
-        Invoke("ResetInvincible", invincibleTime);
-    }
-
-    /// <summary>
-    /// ñ≥ìGèÛë‘ÉäÉZÉbÉg
-    /// </summary>
-    void ResetInvincible()
-    {
+        yield return new WaitForSeconds(invincibleTime);
+        charaBlinkScript.BlinkStart(false);
         invincible = false;
     }
 
