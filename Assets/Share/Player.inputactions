@@ -58,6 +58,17 @@
                 },
                 {
                     "name": "",
+                    "id": "e7de3bbf-0478-41fb-9fa2-2c20803635fb",
+                    "path": "<SwitchProControllerHID>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e81ae8e6-c0d6-4a3b-b4dd-7831f312a6bc",
                     "path": "<SwitchProControllerHID>/buttonEast",
                     "interactions": "",
@@ -96,6 +107,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad;Joystick",
+                    "action": "Pose",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7e9d1b6-91a1-45a3-9cdc-82b1a3c6c9e9",
+                    "path": "<SwitchProControllerHID>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Pose",
                     "isComposite": false,
                     "isPartOfComposite": false
