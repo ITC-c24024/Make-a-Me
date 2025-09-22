@@ -33,11 +33,11 @@ public class TitleUIManagerScript : UIManagerScript
     [SerializeField] float gravity = 9.8f;
     [SerializeField] float bounceFactor = 0.6f;
     [SerializeField] float groundY = 0f;
-    private float velocity = 0f;
+    [SerializeField] float velocity = 0f;
     [SerializeField] float speed = 1.0f;
 
     bool canSelect;
-
+    bool isMove = false;
     bool isTitle = true;
 
     void Start()
@@ -50,19 +50,19 @@ public class TitleUIManagerScript : UIManagerScript
     {
         Vector2 stickMove = selectAction.ReadValue<Vector2>();
 
-        if (isTitle && decisionAction.triggered)
+        if (isTitle && decisionAction.triggered && !isMove)
         {
             StartCoroutine(HideTitle());
         }
 
-        if (!isCoolTime && canSelect && !isTitle)
+        if (!isCoolTime && canSelect && !isTitle && !isMove)
         {
             if (stickMove.y > 0.2f) ChangeSelect(-1); // 上
             if (stickMove.y < -0.2f) ChangeSelect(1); // 下
             if (decisionAction.triggered) Decision();
 
         }
-        else if (!isCoolTime && !canSelect && !isTitle)
+        else if (!isCoolTime && !canSelect && !isTitle && !isMove)
         {
             if (stickMove.y > 0.2f || stickMove.y < -0.2f)
             {
@@ -133,6 +133,7 @@ public class TitleUIManagerScript : UIManagerScript
         {
             case 0:
                 audioManager.TitleStop();
+                isMove = true;
                 StartCoroutine(shutterScript.CloseShutter());
                 Invoke(nameof(MainScene), 2.5f);
                 canSelect = false;
@@ -166,6 +167,8 @@ public class TitleUIManagerScript : UIManagerScript
 
     IEnumerator HideTitle()
     {
+        isMove = true;
+
         float count = 0f;
         Color startColor = titleImage.color;
 
@@ -179,7 +182,6 @@ public class TitleUIManagerScript : UIManagerScript
 
         // 完全に透明にする
         titleImage.color = new Color(startColor.r, startColor.g, startColor.b, 0f);
-
         isTitle = false;
         StartCoroutine(SetButton());
     }
@@ -209,10 +211,12 @@ public class TitleUIManagerScript : UIManagerScript
                 velocity = -velocity * bounceFactor;
 
                 // 速度が小さすぎたら完全停止
-                if (Mathf.Abs(velocity) < 0.1f)
+                if (Mathf.Abs(velocity) < 80f)
                 {
+                    Debug.Log("停止");
                     velocity = 0f;
                     canSelect = true;
+                    isMove = false;
                     yield break; // コルーチン終了（動きを止める）
                 }
             }
