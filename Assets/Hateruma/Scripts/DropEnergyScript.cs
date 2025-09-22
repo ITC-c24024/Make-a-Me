@@ -119,6 +119,12 @@ public class DropEnergyScript : MonoBehaviour
     /// <param name="amount">エネルギーの量</param>
     public IEnumerator SetHoneyAmount(int amount)
     {
+        // 点滅が動いていたら止める
+        if (blinkSC != null)
+        {
+            blinkSC.StopBlink();
+        }
+
         dropTime = 1f;
 
         dropEnergyAmount = amount;
@@ -233,6 +239,12 @@ public class DropEnergyScript : MonoBehaviour
     /// </summary>
     void PosReset()
     {
+        // 点滅が動いていたら止める
+        if (blinkSC != null)
+        {
+            blinkSC.StopBlink();
+        }
+
         this.transform.position = startPos;
     }
 }

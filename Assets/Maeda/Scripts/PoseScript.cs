@@ -20,6 +20,8 @@ public class PoseScript : MonoBehaviour
     [SerializeField, Header("ポーズUI")]
     GameObject[] poseUI;
 
+    [SerializeField, Header("スコアマネージャースクリプト")]
+    ScoreManager scoreManaSC;
 
     //UI切り替え変数
     private int uiNum = 0;
@@ -54,6 +56,8 @@ public class PoseScript : MonoBehaviour
 
         poseUI[uiNum].SetActive(true);
         //StartAnimationForScene();
+
+        scoreManaSC = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
     }
 
     void Update()
@@ -98,6 +102,7 @@ public class PoseScript : MonoBehaviour
                     //動けるようにする
                     Time.timeScale = 1;
                     StartCoroutine(shutterScript.CloseShutter());
+                    scoreManaSC.ResetScores();
                     Invoke("SelectTitle", 2.5f);
                     break;
             }

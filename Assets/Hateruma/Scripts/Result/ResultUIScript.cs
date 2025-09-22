@@ -97,12 +97,16 @@ public class ResultUIScript : UIManagerScript
             case 0:
                 audioManager.ResultStop();
                 StartCoroutine(shutterScript.CloseShutter());
+                // スコアをリセット
+                ScoreManager.Instance.ResetScores();
                 Invoke(nameof(MainScene), 2.5f);
                 break;
 
             case 1:
                 audioManager.ResultStop();
                 StartCoroutine(shutterScript.CloseShutter());
+                // スコアをリセット
+                ScoreManager.Instance.ResetScores();
                 Invoke(nameof(TitleScene), 2.5f);
                 break;
         }
