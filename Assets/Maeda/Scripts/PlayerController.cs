@@ -164,7 +164,7 @@ public class PlayerController : ActionScript
         energyScript.LostEnergy();
 
         invincible = true;
-        charaBlinkScript.BlinkStart(true);
+        
 
         isStun = true;
         animator.SetBool("Isstun", true);
@@ -175,9 +175,10 @@ public class PlayerController : ActionScript
         yield return new WaitForSeconds(stanTime);
 
         isStun = false;
- 
         animator.SetBool("Isstun", false);
-        
+
+        charaBlinkScript.BlinkStart(true);
+
         transform.localRotation = Quaternion.Euler(
             0, 
             transform.localEulerAngles.y, 

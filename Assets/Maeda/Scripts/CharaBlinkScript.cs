@@ -6,7 +6,7 @@ public class CharaBlinkScript : MonoBehaviour
 {
     [SerializeField]
     [Header("点滅間隔")]
-    float timeOut = 0.2f;
+    float timeOut = 0.1f;
 
     float timeElapsed;//点滅間隔を計算するタイマー
 
