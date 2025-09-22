@@ -61,6 +61,7 @@ public class ScoreScript : MonoBehaviour
 
     void Start()
     {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         StartCoroutine(MoveMaterial());
     }
 
@@ -185,7 +186,7 @@ public class ScoreScript : MonoBehaviour
     IEnumerator MoveClone()
     {
         isMove = true;
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(0.2f);
 
         float time = 0;
         while (time < coolTime)

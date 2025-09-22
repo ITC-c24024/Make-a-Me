@@ -12,27 +12,33 @@ public class ScoreManager : MonoBehaviour
     }
 
     public Player[] players = new Player[4];
+    public int maxScore = 0;
 
-    public int maxScore =0;
+    public static ScoreManager Instance { get; private set; }
 
-    void Start()
+    void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
-
-        for (int i = 0; i < players.Length; i++)
+        // シングルトン化（同じオブジェクトがある場合は削除）
+        if (Instance == null)
         {
-            players[i] = new Player();       
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        ResetScores(); // 初期化
     }
 
     /// <summary>
     /// スコアを更新
     /// </summary>
-    /// <param name="num">作業場の番号</param>
     public void ChangeScore(int num)
     {
         players[num - 1].score++;
-
         Ranking();
     }
 
@@ -41,7 +47,6 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     void Ranking()
     {
-        // スコアの高い順に並べ替え
         var sorted = players
             .Select((p, index) => new { Player = p, index = index })
             .OrderByDescending(x => x.Player.score)
@@ -49,8 +54,7 @@ public class ScoreManager : MonoBehaviour
 
         int currentRank = 1;
         for (int i = 0; i < sorted.Length; i++)
-        {            
-            //同率処理
+        {
             if (i > 0 && sorted[i].Player.score < sorted[i - 1].Player.score)
             {
                 currentRank = i + 1;
@@ -59,9 +63,18 @@ public class ScoreManager : MonoBehaviour
             players[originIndex].rank = currentRank;
         }
         maxScore = sorted[0].Player.score;
-        for(int i = 0; i < players.Length; i++)
+    }
+
+    /// <summary>
+    /// 全スコアと順位をリセット
+    /// </summary>
+    public void ResetScores()
+    {
+        for (int i = 0; i < players.Length; i++)
         {
-            Debug.Log($"Player{i + 1}: Score={players[i].score}, Rank={players[i].rank}");
+            players[i].score = 0;
+            players[i].rank = 0;
         }
+        maxScore = 0;
     }
 }
