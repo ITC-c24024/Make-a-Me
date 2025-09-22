@@ -50,6 +50,7 @@ public class ControllerBindScript : MonoBehaviour
         Destroy(joined.gameObject);
 
         waitScript.ChangeUI(slotNum);
+
         if (slotNum == num)
         {
             StartCoroutine(gameController.GameStart());

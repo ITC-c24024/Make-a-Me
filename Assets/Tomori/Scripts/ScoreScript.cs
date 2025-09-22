@@ -117,7 +117,7 @@ public class ScoreScript : MonoBehaviour
         {
             clones[1].SetActive(false);
             clones[2].SetActive(true);
-            animator.SetBool("IsYell", true);
+            //animator.SetBool("IsYell", true);
 
             isWork = false;
             slider.gameObject.SetActive(false);

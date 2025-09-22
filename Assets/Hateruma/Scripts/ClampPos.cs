@@ -19,6 +19,12 @@ public class ClampPos : MonoBehaviour
     // z²•ûŒü‚ÌˆÚ“®”ÍˆÍ‚ÌÅ‘å’l
     [SerializeField] float maxZ;
 
+    // y²•ûŒü‚ÌˆÚ“®”ÍˆÍ‚ÌÅ¬’l
+    [SerializeField] float minY;
+
+    // y²•ûŒü‚ÌˆÚ“®”ÍˆÍ‚ÌÅ‘å’l
+    [SerializeField] float maxY;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +37,7 @@ public class ClampPos : MonoBehaviour
         pos = transform.localPosition;
 
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
+        pos.y = Mathf.Clamp(pos.y, minY, maxY);
         pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
 
         transform.localPosition = pos;

@@ -161,6 +161,11 @@ public class AudioManager : MonoBehaviour
     {
         resultSource.PlayOneShot(resultClip);
     }
+    public void ResultStop()
+    {
+        resultSource.Stop();
+    }
+
     public void Rank()
     {
         rankSource.PlayOneShot(rankClip);

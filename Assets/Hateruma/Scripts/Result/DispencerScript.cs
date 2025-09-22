@@ -12,6 +12,9 @@ public class DispencerScript : MonoBehaviour
     [SerializeField, Header("発射オブジェクト")]
     GameObject shotObj;
 
+    [SerializeField, Header("発射口")]
+    GameObject launcherObj;
+
     [SerializeField, Header("プレイヤー番号")]
     int playerNum;
 
@@ -24,31 +27,36 @@ public class DispencerScript : MonoBehaviour
     //発射数
     int shotCount;
 
-    [SerializeField, Header("順位イメージ")]
-    Image[] rankImage;
-
     [SerializeField, Header("カウントのイメージ")]
     Image[] countImage;
 
     [SerializeField, Header("数字のスプライト")]
     Sprite[] numSprite;
 
-    ScoreManager scoreManaSC;
+    //スコアマネージャースクリプト
+    public ScoreManager scoreManaSC;
+
+    //リザルトマネージャースクリプト
+    public ResultManagerSC resultManaSC;
+
+    [SerializeField, Header("オーディオマネージャースクリプト")]
+    AudioManager audioManaSC;
     private void Awake()
     {
-        //scoreManaSC = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-        if (cloneObj == null) cloneObj = new List<GameObject>();
-        if (cloneRB == null) cloneRB = new List<Rigidbody>();
-
-        //cloneCount = scoreManaSC.players[playerNum - 1].score;
-
-        GameObject[] clones = GameObject.FindGameObjectsWithTag($"ResultCloneP{playerNum}");
-        cloneObj.AddRange(clones);
+        
     }
 
 
     void Start()
     {
+        if (cloneObj == null) cloneObj = new List<GameObject>();
+        if (cloneRB == null) cloneRB = new List<Rigidbody>();
+
+        cloneCount = scoreManaSC.players[playerNum - 1].score;
+
+        GameObject[] clones = GameObject.FindGameObjectsWithTag($"ResultCloneP{playerNum}");
+        cloneObj.AddRange(clones);
+
         foreach (var obj in cloneObj)
         {
             cloneRB.Add(obj.GetComponent<Rigidbody>());
@@ -74,6 +82,9 @@ public class DispencerScript : MonoBehaviour
 
             clone.transform.position = shotObj.transform.position;
 
+            StartCoroutine(BounceObj(launcherObj.transform, 0.3f));
+            audioManaSC.Shoot();
+
             rb.isKinematic = false;
             rb.AddForce(shotObj.transform.forward * 10, ForceMode.Impulse);
 
@@ -92,6 +103,25 @@ public class DispencerScript : MonoBehaviour
 
             yield return new WaitForSeconds(count);
         }
+
+        StartCoroutine(resultManaSC.ShowResultAdd());
+
+    }
+
+    IEnumerator BounceObj(Transform target, float time)
+    {
+        float t = 0f;
+        Vector3 startScale = Vector3.zero;
+        Vector3 endScale = Vector3.one;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / time;
+            float s = 2f;
+            float curved = 1f + s * Mathf.Pow(t - 1f, 3) + s * Mathf.Pow(t - 1f, 2);
+            target.localScale = Vector3.LerpUnclamped(startScale, endScale, curved);
+            yield return null;
+        }
+        target.localScale = Vector3.one;
     }
 
     void SetUI()
@@ -102,7 +132,6 @@ public class DispencerScript : MonoBehaviour
         //十の位がある時,十の位が表示されていないとき
         if (ten > 0 && !countImage[1].enabled)
         {
-            Debug.Log("hoge");
             //一の位を右にずらす
             countImage[0].rectTransform.anchoredPosition = new Vector2(
                 countImage[0].rectTransform.anchoredPosition.x + 20,

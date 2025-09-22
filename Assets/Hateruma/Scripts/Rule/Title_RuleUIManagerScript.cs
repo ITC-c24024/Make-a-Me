@@ -84,8 +84,6 @@ public class Title_RuleUIManagerScript : UIManagerScript
         }
 
         StartCoroutine(SelectCoolTime());
-
-        Debug.Log("hoge");
     }
 
 }
